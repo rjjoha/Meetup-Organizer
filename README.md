@@ -1,2 +1,2 @@
-# Meetup-Organzer
+# Meetup-Organizer
 Group Project
