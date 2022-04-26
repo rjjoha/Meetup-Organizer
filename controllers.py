@@ -29,6 +29,14 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 
+##############Leejin Kim##############
+from .models import get_user_email
+from .settings import APP_FOLDER
+from py4web.utils.url_signer import URLSigner
+import os
+url_signer = URLSigner(session)
+import json
+#############    end    ##############
 
 @action("index")
 @action.uses("index.html", auth, T)
@@ -37,3 +45,18 @@ def index():
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
     return dict(message=message, actions=actions)
+
+
+##############Leejin Kim##############
+@action('notifications')
+@action.uses('notifications.html', db, auth)
+def index():
+    ### You have to modify the code here as well.
+    JSON_FILE = os.path.join(APP_FOLDER, "data", "table.json")
+    data = open(JSON_FILE)
+    key = ["all", "pending", "accepted"]
+    return dict(
+        data = json.load(data),
+        key = key 
+    )
+#############    end    ##############
