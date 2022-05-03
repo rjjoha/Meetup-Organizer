@@ -60,3 +60,9 @@ def index():
         key = key 
     )
 #############    end    ##############
+
+#############Robert Johansen###############
+@action("splash_page")
+@action.uses("splash_page.html", auth, T)
+def splash_page():
+    return dict()

@@ -12,16 +12,39 @@
   <body>
     <header>
       <!-- Navigation bar -->
-      <nav class="black">
+      <nav class="white">
         <!-- Logo -->
         <a href="[[=URL('index')]]">
-          <b>py4web <script>document.write(window.location.href.split('/')[3]);</script></b>
+          <!---<b>py4web <script>document.write(window.location.href.split('/')[3]);</script></b>--->
+          <img src="https://64.media.tumblr.com/a9f311feb3c35ed9d4143e383f7c6976/00cb629c84562886-77/s500x750/5c4cae150541a931dfcebc5ae83d2aed011fc7b3.pnj" width="156" height="84">
         </a>
         <!-- Do not touch this -->
         <label for="hamburger">☰</label>
         <input type="checkbox" id="hamburger">
         <!-- Left menu ul/li -->
         [[block page_left_menu]][[end]]
+        <div class="navbar-menu">
+          <a class="navbar-item">
+            Events
+          </a>
+
+          <a class="navbar-item">
+            Create New Event
+          </a>
+
+          <div class="navbar-item has dropdown is-hoverable">
+            <a class="navbar-link">
+              Notifications
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Insert Notifications Page here
+              </a>
+            </div>
+
+          </div>
+        </div>
         <!-- Right menu ul/li -->
         <ul>
           [[if globals().get('user'):]]
