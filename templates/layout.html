@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-background-dark">
+<html class="has-background-grey">
   <head>
     <base href="[[=URL('static')]]/">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,27 +25,31 @@
           <input type="checkbox" id="hamburger">
           <!-- Left menu ul/li -->
           [[block page_left_menu]][[end]]
-          <a class="navbar-item">
+          <a class="navbar-link" href="[[=URL('event')]]">
             Events
           </a>
 
-          <a class="navbar-item">
+          <a class="navbar-link" href="[[=URL('add')]]">
             Create New Event
           </a>
 
+<<<<<<< HEAD
+          
+          <a class="navbar-link" href="[[=URL('notifications')]]">
+            Notifications
+          </a>
+=======
           <div class="navbar-item has dropdown is-hoverable">
             <li><a class="navbar-link" href="[[=URL('notifications' )]]">Notifications</a></li>
  
               <!-- Notifications
             </a> -->
+>>>>>>> cc38baf89e58e7ad83ea8b352fb716a1941cf5f1
 
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                Insert Notifications Page here
-              </a>
-            </div>
+            <!-- Notifications
+          </a> -->
 
-          </div>
+          
         </div>
       </nav>
         <!-- Right menu ul/li -->
