@@ -66,3 +66,15 @@ def index():
 @action.uses("splash_page.html", auth, T)
 def splash_page():
     return dict()
+#############    end    ##############
+
+#############Michael Ekman###############
+@action("event")
+@action.uses("event.html", db, auth)
+def edit_event():
+    return dict()
+    
+@action("edit_event")
+@action.uses("edit_event.html", db, auth)
+def edit_event():
+    return dict()
