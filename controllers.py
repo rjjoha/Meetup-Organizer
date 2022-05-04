@@ -48,7 +48,7 @@ def index():
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('add', method=["GET", "POST"])
-@action.uses('add.html', url_signer, db, session, auth.user)
+@action.uses('create_event.html', url_signer, db, session, auth.user)
 def add():
     # Insert form: no record= in it.
     form = Form(db.event, csrf_session=session, formstyle=FormStyleBulma)
