@@ -75,23 +75,34 @@ def edit(event_id=None):
 
 ##############Leejin Kim##############
 
-@action('notifications/<event_id:int>', method=["GET", "POST"])
-@action.uses('notifications.html', url_signer, db, session, auth.user)
-def notifications(event_id=None):
-    assert event_id is not None
-    # user = auth.get_user()
-    p = db.event[event_id]
-    if p["user_email"] != get_user_email():
-        redirect(URL('index'))
-    if p is None:
+# @action('notifications/<event_id:int>', method=["GET", "POST"])
+# @action.uses('notifications.html', url_signer, db, session, auth.user)
+# def notifications(event_id=None):
+#     assert event_id is not None
+#     # user = auth.get_user()
+#     p = db.event[event_id]
+#     if p["user_email"] != get_user_email():
+#         redirect(URL('index'))
+#     if p is None:
         
-        redirect(URL('index'))
-    # s is the user_name
-    s = ""
-    # s = user
+#         redirect(URL('index'))
+#     # s is the user_name
+#     s = ""
+#     # s = user
     
 
-    return dict( s = s)
+#     return dict( s = s)
+
+@action("notifications")
+@action.uses("notifications.html", auth, T)
+def index():
+    user = auth.get_user()
+    rows = db(db.event.user_email == get_user_email()).select()
+    s = user
+    return dict(rows=rows, url_signer=url_signer, s = s)
+     
+   
+
 #############    end    ##############
 
 #############Robert Johansen###############
