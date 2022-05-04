@@ -74,17 +74,24 @@ def edit(event_id=None):
     return dict(form=form)
 
 ##############Leejin Kim##############
-@action('notifications')
-@action.uses('notifications.html', db, auth)
-def index():
-    ### You have to modify the code here as well.
-    JSON_FILE = os.path.join(APP_FOLDER, "data", "table.json")
-    data = open(JSON_FILE)
-    key = ["all", "pending", "accepted"]
-    return dict(
-        data = json.load(data),
-        key = key 
-    )
+
+@action('notifications/<event_id:int>', method=["GET", "POST"])
+@action.uses('notifications.html', url_signer, db, session, auth.user)
+def notifications(event_id=None):
+    assert event_id is not None
+    # user = auth.get_user()
+    p = db.event[event_id]
+    if p["user_email"] != get_user_email():
+        redirect(URL('index'))
+    if p is None:
+        
+        redirect(URL('index'))
+    # s is the user_name
+    s = ""
+    # s = user
+    
+
+    return dict( s = s)
 #############    end    ##############
 
 #############Robert Johansen###############
