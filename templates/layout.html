@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html class="has-background-dark">
   <head>
     <base href="[[=URL('static')]]/">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAAQEAAAEAIAAwAAAAFgAAACgAAAABAAAAAgAAAAEAIAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAA=="/>
-    <link rel="stylesheet" href="css/no.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/bulma.css">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
     <style>.py4web-validation-error{margin-top:-16px; font-size:0.8em;color:red}</style>
     [[block page_head]]<!-- individual pages can customize header here -->[[end]]
   </head>
   <body>
     <header>
       <!-- Navigation bar -->
-      <nav class="white">
-        <!-- Logo -->
-        <a href="[[=URL('index')]]">
-          <!---<b>py4web <script>document.write(window.location.href.split('/')[3]);</script></b>--->
-          <img src="https://64.media.tumblr.com/a9f311feb3c35ed9d4143e383f7c6976/00cb629c84562886-77/s500x750/5c4cae150541a931dfcebc5ae83d2aed011fc7b3.pnj" width="156" height="84">
-        </a>
-        <!-- Do not touch this -->
-        <label for="hamburger">☰</label>
-        <input type="checkbox" id="hamburger">
-        <!-- Left menu ul/li -->
-        [[block page_left_menu]][[end]]
-        <div class="navbar-menu">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <!-- Logo -->
+          <a class="navbar-item" href="[[=URL('index')]]">
+            <!---<b>py4web <script>document.write(window.location.href.split('/')[3]);</script></b>--->
+            <img src="https://64.media.tumblr.com/a9f311feb3c35ed9d4143e383f7c6976/00cb629c84562886-77/s500x750/5c4cae150541a931dfcebc5ae83d2aed011fc7b3.pnj" width="156" height="84">
+          </a>
+          <!-- Do not touch this -->
+          <label for="hamburger">☰</label>
+          <input type="checkbox" id="hamburger">
+          <!-- Left menu ul/li -->
+          [[block page_left_menu]][[end]]
           <a class="navbar-item">
             Events
           </a>
@@ -45,6 +46,7 @@
 
           </div>
         </div>
+      </nav>
         <!-- Right menu ul/li -->
         <ul>
           [[if globals().get('user'):]]
@@ -70,7 +72,7 @@
           </li>
           [[pass]]
         </ul>
-      </nav>
+      
     </header>
     <!-- beginning of HTML inserted by extending template -->
     <center>
