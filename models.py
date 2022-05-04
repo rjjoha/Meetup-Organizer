@@ -19,3 +19,18 @@ def get_time():
 #
 # db.commit()
 #
+
+db.define_table(
+    'event',
+    Field('event_title', requires=IS_NOT_EMPTY()),
+    Field('event_image', "upload"),
+    Field('event_location', requires=IS_NOT_EMPTY()),
+    Field('event_description', requires=IS_NOT_EMPTY()),
+    Field('event_attachment', "upload"),
+    Field('user_email', default=get_user_email)
+)
+
+db.event.id.readable = db.event.id.writable = False
+db.event.user_email.readable = db.event.user_email.writable = False
+
+db.commit()

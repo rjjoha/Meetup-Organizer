@@ -1,7 +1,28 @@
 [[extend 'layout.html']]
 
 <div class="section">
-  <div class="vars">
-      [[=message]]
-  </div>
+    <div class="vars">
+        [[=message]]
+    </div>
+    <h1 class="title">Your Events</h1>
+    <div class="container">
+        <table class="table is-striped is-fullwidth">
+            <tr>
+                <th>Event Title</th>
+                <th>Event Image</th>
+                <th>Event Location</th>
+                <th>Event Description</th>
+                <th>Event Attachment</th>
+            </tr>
+            [[for row in rows:]]
+            <tr>
+                <td>[[=row["event_title"] ]]</td>
+                <td>[[=row["event_image"] ]]</td>
+                <td>[[=row["event_location"] ]]</td>
+                <td>[[=row["event_description"] ]]</td>
+                <td>[[=row["event_attachment"] ]]</td>
+            </tr>
+            [[pass]]
+        </table>
+    </div>
 </div>
