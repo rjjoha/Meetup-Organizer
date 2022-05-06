@@ -107,7 +107,7 @@ def index():
 
 #############Robert Johansen###############
 @action("splash_page")
-@action.uses("splash_page.html", auth, T)
+@action.uses("splash_page.html", auth, db, session, T)
 def splash_page():
     return dict()
 #############    end    ##############
