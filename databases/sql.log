@@ -19,3 +19,14 @@ CREATE TABLE "auth_user_tag_groups"(
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
+timestamp: 2022-05-05T17:44:49.692548
+CREATE TABLE "event"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "event_title" CHAR(512),
+    "event_image" CHAR(512),
+    "event_location" CHAR(512),
+    "event_description" CHAR(512),
+    "event_attachment" CHAR(512),
+    "user_email" CHAR(512)
+);
+success!
