@@ -59,4 +59,32 @@
       <span>Settings</span>
     </a>
   </section>
+
+<div class="section">
+  <div class="block">
+    <div class="box has-background-link is-medium">
+      <div class="columns is-vcentered">
+     <h1 class="title" style="color:white">Discussion</h1>
+      </div>
+      
+    <div id="comments" class="block">
+      <!-- Here will go the comments. -->
+    </div>
+
+    <div class="block">
+      <div class="field">
+        <p class="control">
+          <input class="input" type="text" id="new_comment" value=""/>
+        </p>
+      </div>
+      <button class="button is-primary" id="add_button">Add</button>
+    </div>
+
+  </div>
 </div>
+</div>
+
+[[block page_scripts]]
+<script src="js/jquery-3.6.0.js"></script>
+<script src="js/index.js"></script>
+[[end]]
