@@ -28,30 +28,26 @@ db.define_table(
     Field('event_location', requires=IS_NOT_EMPTY()),
     Field('event_description', requires=IS_NOT_EMPTY()),
     Field('event_attachment', 'upload'),
-    Field('user_email', default=get_user_email),
-    Field('pending_invite', 'boolean', default=FALSE),
+    Field('create_user_email', default=get_user_email),
+    Field('pending_invite', 'list:reference profile'),
+    Field('accepted_invite', 'list:reference profile'),
 )
 
 db.define_table(
     'profile',
-    Field('prof_first_name', requires=IS_NOT_EMPTY()),
-    Field('prof_last_name', requires=IS_NOT_EMPTY()),
+    Field('profile_first_name', requires=IS_NOT_EMPTY()),
+    Field('profile_last_name', requires=IS_NOT_EMPTY()),
     Field('description'),
-    Field('notifications' 'reference events'),
-    Field('events', 'reference event'),
-
-db.define_table(
-    'invite',
-    Field('invite_first_name', requires=IS_NOT_EMPTY()),
-    Field('invite_last_name', requires=IS_NOT_EMPTY()),
-    Field('invited', 'reference profile_id'),
-    Field('invited_event_id', 'reference event'),
-)
+    Field('user_email', default=get_user_email()),
+    Field('notifications', 'list:reference event'), ## Pending invites
+    Field('events', 'list:reference event'), ## Accepted invites
 
 
 )
 
 db.event.id.readable = db.event.id.writable = False
+db.profile.id.readable = db.profile.id.writable = False
 db.event.user_email.readable = db.event.user_email.writable = False
+db.profile.user_email.readable = db.profile.user_email.writable = False
 
 db.commit()
