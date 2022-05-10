@@ -30,3 +30,26 @@ CREATE TABLE "event"(
     "user_email" CHAR(512)
 );
 success!
+timestamp: 2022-05-10T16:18:31.435497
+ALTER TABLE "event" ADD "create_user_email" CHAR(512);
+timestamp: 2022-05-10T16:18:31.442504
+ALTER TABLE "event" ADD "pending_invite" TEXT;
+timestamp: 2022-05-10T16:18:31.450511
+ALTER TABLE "event" ADD "accepted_invite" TEXT;
+success!
+success!
+success!
+success!
+timestamp: 2022-05-10T16:48:27.351244
+CREATE TABLE "profile"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "profile_first_name" CHAR(512),
+    "profile_last_name" CHAR(512),
+    "description" CHAR(512),
+    "user_email" CHAR(512),
+    "notifications" TEXT,
+    "events" TEXT
+);
+success!
+success!
+success!

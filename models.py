@@ -2,6 +2,7 @@
 This file defines the database models
 """
 
+import datetime
 from pickle import FALSE
 from .common import db, Field, auth
 from pydal.validators import *
@@ -28,7 +29,7 @@ db.define_table(
     Field('event_location', requires=IS_NOT_EMPTY()),
     Field('event_description', requires=IS_NOT_EMPTY()),
     Field('event_attachment', 'upload'),
-    Field('create_user_email', default=get_user_email),
+    Field('user_email', default=get_user_email),
     Field('pending_invite', 'list:reference profile'),
     Field('accepted_invite', 'list:reference profile'),
 )
@@ -38,7 +39,7 @@ db.define_table(
     Field('profile_first_name', requires=IS_NOT_EMPTY()),
     Field('profile_last_name', requires=IS_NOT_EMPTY()),
     Field('description'),
-    Field('user_email', default=get_user_email()),
+    Field('user_email', default=get_user_email),
     Field('notifications', 'list:reference event'), ## Pending invites
     Field('events', 'list:reference event'), ## Accepted invites
 
