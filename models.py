@@ -38,6 +38,9 @@ db.define_table(
     'profile',
     Field('profile_first_name', requires=IS_NOT_EMPTY()),
     Field('profile_last_name', requires=IS_NOT_EMPTY()),
+    Field('profile_image', 'upload'),
+    Field('profile_hobbies'),
+    Field('profile_location'),
     Field('description'),
     Field('user_email', default=get_user_email),
     Field('notifications', 'list:reference event'), ## Pending invites
