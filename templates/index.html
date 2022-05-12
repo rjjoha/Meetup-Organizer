@@ -1,28 +1,112 @@
 [[extend 'layout.html']]
 
-<div class="section">
-    <div class="vars">
-        [[=message]]
+<body>
+    <div class="container is-max-widescreen">
+      <section class="section">
+        <div class="block">
+          <div class="columns">
+            <div class="column is-narrow">
+              <figure class="image is-128x128">
+                <img src="INSERT DB IMAGE REFERENCE URL">
+              </figure>
+  
+            </div>
+            <div class="column is-narrow">
+              <div class="columns">
+                <div class="column is-narrow">
+                  <h1 class="title">Username</h1>
+                </div>
+                <div class="column is-narrow">
+                  <button class="button is-info">Settings</button>
+                </div>
+              </div>
+              <p class="subtitle">Description about the user, hobbies, interests, rough location</p>
+            </div>
+          </div>
+  
+          <div class="columns">
+            <div class="column is-one-quarter">
+              <div class="box has-background-danger is-medium">
+                <aside class="menu">
+                  <p class="menu-label">
+                    Notifications
+                  </p>
+                  <ul class="menu-list">
+                    <li><a>Notification 1</a></li>
+                    <li><a>Notification 2</a></li>
+                    <li><a>Notification 3</a></li>
+                    <li><a>Notification 4</a></li>
+                    <li><a>Notification 5</a></li>
+                  </ul>
+                </aside>
+               </div>
+            </div>
+            <div class="column">
+              <div class="block">
+                <div class="card">
+                  <header class="card-header">
+                    <figure class=" card-header-icon image is-64x64">
+                      <img src="INSERT DB IMAGE REFERENCE URL">
+                    </figure>
+                    <p class="card-header-title">
+                      Event 1
+                    </p>
+                    <button class="card-header-icon">
+                      <span class="icon">
+                        <i class="fas fa-angle-down"></i>
+                      </span>
+                    </button>
+                  </header>
+     
+                </div>
+    
+                <div class="card">
+                  <header class="card-header">
+                    <figure class=" card-header-icon image is-64x64">
+                      <img src="INSERT DB IMAGE REFERENCE URL">
+                    </figure>
+                    <p class="card-header-title">
+                      Event 2
+                    </p>
+                    <button class="card-header-icon">
+                      <span class="icon">
+                        <i class="fas fa-angle-down"></i>
+                      </span>
+                    </button>
+                  </header>
+     
+                </div>
+    
+                <div class="card">
+                  <header class="card-header">
+                    <figure class=" card-header-icon image is-64x64">
+                      <img src="INSERT DB IMAGE REFERENCE URL">
+                    </figure>
+                    <p class="card-header-title">
+                      Event 3
+                    </p>
+                    <button class="card-header-icon">
+                      <span class="icon">
+                        <i class="fas fa-angle-down"></i>
+                      </span>
+                    </button>
+                  </header>
+     
+                </div>
+              </div>
+              
+  
+            </div>
+          </div>
+         
+  
+        
+  
+          
+        </div>
+      </section>
     </div>
-    <h1 class="title">Your Events</h1>
-    <div class="container">
-        <table class="table is-striped is-fullwidth">
-            <tr>
-                <th>Event Title</th>
-                <th>Event Image</th>
-                <th>Event Location</th>
-                <th>Event Description</th>
-                <th>Event Attachment</th>
-            </tr>
-            [[for row in rows:]]
-            <tr>
-                <td>[[=row["event_title"] ]]</td>
-                <td>[[=row["event_image"] ]]</td>
-                <td>[[=row["event_location"] ]]</td>
-                <td>[[=row["event_description"] ]]</td>
-                <td>[[=row["event_attachment"] ]]</td>
-            </tr>
-            [[pass]]
-        </table>
-    </div>
-</div>
+  
+          
+   
+  </body>
