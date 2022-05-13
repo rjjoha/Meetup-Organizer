@@ -1,1 +1,64 @@
 [[extend 'layout.html']]
+
+<body>
+    <div class="container is-max-widescreen">
+      <section class="section">
+        <div class="block">
+          <div class="box has-background-link is-medium">
+    
+            <div class="columns is-vcentered is-mobile">
+              <h1 class="title" style="color:white">Profile Settings</h1>
+            </div>
+          </div>
+          
+          <div class="columns is-mobile">
+            <div class="column">
+              <form class="box has-background-info-light is-medium">
+                <aside class="menu">
+                  <p class="menu-label">
+                    Options
+                  </p>
+                  <ul class="menu-list">
+                    <li><a>Username</a></li>
+                    <li><a>Email</a></li>
+                    <li><a>Password</a></li>
+                    <li><a>City</a></li>
+                    <li><a>Password</a></li>
+                  </ul>
+                </aside>
+              </form>
+            </div>
+  
+            <div class="column">
+              <div class="columns is-mobile">
+                <div class="column is-narrow">
+                  <figure class="image is-128x128">
+                    <img src="INSERT DB IMAGE REFERENCE URL">
+                  </figure>
+      
+                </div>
+                <div class="column is-narrow">
+                  <div class="columns is-mobile">
+                    <div class="column is-narrow">
+                      <input class="input" type="text" placeholder="Username">
+                    </div>
+                    <div class="column is-narrow">
+                      <button class="button is-primary is-outlined">Save</button>
+                    </div>
+                  </div>
+                  <textarea class="textarea" placeholder="User description"></textarea>
+                  <button class="button is-primary is-outlined">Save Description</button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+        </div>
+        <a class="button is-danger is-light" href="[[=URL('index')]]">
+          <span>Back</span>
+        </a>
+      </section>
+    </div>
+
+  </body>

@@ -123,3 +123,8 @@ def edit_event():
 @action.uses("edit_event.html", db, auth)
 def edit_event():
     return dict()
+    
+@action("account_settings")
+@action.uses("account_settings.html", db, auth)
+def account_settings():
+    return dict()
