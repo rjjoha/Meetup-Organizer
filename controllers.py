@@ -48,31 +48,66 @@ def index():
     rows = db(db.event.user_email == get_user_email()).select()
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
-@action('add', method=["GET", "POST"])
-@action.uses('create_event.html', url_signer, db, session, auth.user)
-def add():
-    # Insert form: no record= in it.
-    form = Form(db.event, csrf_session=session, formstyle=FormStyleBulma)
-    if form.accepted:
-        # We simply redirect; the insertion already happened.
-        redirect(URL('index'))
-    # Either this is a GET request, or this is a POST but not accepted = with errors.
-    return dict(form=form)
+@action('create_event')
+@action.uses('create_event.html', url_signer)
+def create_event():
+    return dict(
+        load_events_url = URL('load_events', signer=url_signer),
+        add_event_url = URL('add_event', signer=url_signer),
+        delete_event_url = URL('delete_event', signer=url_signer),
+    )
+
+@action('load_events')
+@action.uses(url_signer.verify(), db)
+def load_events():
+    rows = db(db.event).select().as_list()
+    return dict(rows=rows)
     
-@action('edit_event/<event_id:int>', method=["GET", "POST"])
-@action.uses('edit_event.html', url_signer, db, session, auth.user)
-def edit(event_id=None):
-    assert event_id is not None
-    e = db.event[event_id]
-    if e is None:
-        # Nothing found to be edited!
-        redirect(URL('index'))
-    # Edit form: it has record=
-    form = Form(db.event, record=b, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
-    if form.accepted:
-        # The update already happened!
-        redirect(URL('index'))
-    return dict(form=form)
+@action('add_event', method="POST")
+@action.uses(url_signer.verify(), db)
+def add_event():
+    id = db.event.insert(
+        event_title=request.json.get('event_title'),
+        event_image=request.json.get('event_image'),
+        event_location=request.json.get('event_location'),
+        event_description=request.json.get('event_description'),
+        event_attachment=request.json.get('event_attachment'),
+    )
+    return dict(id=id)
+
+
+# @action('add', method=["GET", "POST"])
+# @action.uses(url_signer, db, session, auth.user)
+# def add():
+#     # Insert form: no record= in it.
+#     form = Form(db.event, csrf_session=session, formstyle=FormStyleBulma)
+#     if form.accepted:
+#         # We simply redirect; the insertion already happened.
+#         redirect(URL('index'))
+#     # Either this is a GET request, or this is a POST but not accepted = with errors.
+#     return dict(form=form)
+
+# @action('edit_event/<event_id:int>', method=["GET", "POST"])
+# @action.uses('edit_event.html', url_signer, db, session, auth.user)
+# def edit(event_id=None):
+#     assert event_id is not None
+#     e = db.event[event_id]
+#     if e is None:
+#         # Nothing found to be edited!
+#         redirect(URL('index'))
+#     # Edit form: it has record=
+#     form = Form(db.event, record=b, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
+#     if form.accepted:
+#         # The update already happened!
+#         redirect(URL('index'))
+#     return dict(form=form)
+
+@action('delete_event')
+@action.uses(url_signer.verify(), db)
+def delete_event():
+    id = request.params.get('id')
+    assert id is not None
+    db(db.event.id == id).delete()
 
 ##############Leejin Kim##############
 
@@ -85,12 +120,12 @@ def edit(event_id=None):
 #     if p["user_email"] != get_user_email():
 #         redirect(URL('index'))
 #     if p is None:
-        
+
 #         redirect(URL('index'))
 #     # s is the user_name
 #     s = ""
 #     # s = user
-    
+
 
 #     return dict( s = s)
 
@@ -101,8 +136,8 @@ def index():
     rows = db(db.event.user_email == get_user_email()).select()
     s = user
     return dict(rows=rows, url_signer=url_signer, s = s)
-     
-   
+
+
 
 #############    end    ##############
 
@@ -118,7 +153,7 @@ def splash_page():
 @action.uses("event.html", db, auth)
 def edit_event():
     return dict()
-    
+
 @action("edit_event")
 @action.uses("edit_event.html", db, auth)
 def edit_event():
