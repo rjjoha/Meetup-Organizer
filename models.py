@@ -28,10 +28,12 @@ db.define_table(
     Field('event_image', 'upload'),
     Field('event_location', requires=IS_NOT_EMPTY()),
     Field('event_description', requires=IS_NOT_EMPTY()),
+    Field('event_date', 'date'),
     Field('event_attachment', 'upload'),
     Field('user_email', default=get_user_email),
-    Field('pending_invite', 'list:reference profile'),
-    Field('accepted_invite', 'list:reference profile'),
+    Field('invite_user'),
+    # Field('pending_invite', 'list:reference profile'),
+    # Field('accepted_invite', 'list:reference profile'),
 )
 
 db.define_table(
@@ -43,12 +45,18 @@ db.define_table(
     Field('profile_location'),
     Field('description'),
     Field('user_email', default=get_user_email),
-    Field('notifications', 'list:reference event'), ## Pending invites
-    Field('events', 'list:reference event'), ## Accepted invites
+    Field('notification'),
+    # Field('notifications', 'list:reference event'), ## Pending invites
+    # Field('events', 'list:reference event'), ## Accepted invites
 
 
 )
 
+db.define_table(
+    'invite',
+    Field('inviter', default=get_user_email),
+    Field('invitee') #email
+)
 db.event.id.readable = db.event.id.writable = False
 db.profile.id.readable = db.profile.id.writable = False
 db.event.user_email.readable = db.event.user_email.writable = False
