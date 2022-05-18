@@ -2,6 +2,8 @@
 This file defines cache, session, and translator T object for the app
 These are fixtures that every app needs so probably you will not be editing this file
 """
+
+import copy
 import os
 import sys
 import logging
@@ -11,6 +13,7 @@ from py4web.utils.auth import Auth
 from py4web.utils.downloader import downloader
 from pydal.tools.tags import Tags
 from py4web.utils.factories import ActionFactory
+from py4web.utils.form import FormStyleBulma
 from . import settings
 
 # #######################################################
@@ -78,7 +81,24 @@ elif settings.SESSION_TYPE == "database":
 # Instantiate the object and actions that handle auth
 # #######################################################
 auth = Auth(session, db, define_tables=False)
+
+auth_messages = copy.deepcopy(auth.MESSAGES)
+auth_messages['buttons']['sign-in'] = "Log in"
+auth_messages['buttons']['sign-up'] = "Sign up"
+auth_messages['buttons']['lost-password'] = "Lost password"
+
+# format buttons
+auth_button_classes = {
+    "lost-password": "button is-danger is-light",
+    "register": "button is-info is-light",
+    "request": "button is-primary",
+    "sign-in": "button is-primary",
+    "sign-up": "button is-success",
+    "submit": "button is-primary",
+}
+
 auth.use_username = True
+auth.param.button_classes = auth_button_classes
 auth.param.registration_requires_confirmation = settings.VERIFY_EMAIL
 auth.param.registration_requires_approval = settings.REQUIRES_APPROVAL
 auth.param.login_after_registration = settings.LOGIN_AFTER_REGISTRATION
@@ -86,6 +106,7 @@ auth.param.allowed_actions = settings.ALLOWED_ACTIONS
 auth.param.login_expiration_time = 3600
 auth.param.password_complexity = {"entropy": 50}
 auth.param.block_previous_password_num = 3
+auth.param.formstyle = FormStyleBulma
 auth.param.default_login_enabled = settings.DEFAULT_LOGIN_ENABLED
 auth.define_tables()
 auth.fix_actions()
