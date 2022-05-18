@@ -14,41 +14,70 @@
   <!-- Put here your Vue.js template -->
   <div class="tabs is-boxed is-centered">
     <ul>
-      <li class="is-active">
+      <li>
         <a>
+      <!-- <li class="is-active"> -->
+      
           <!-- <span class="icon is-small"></span>
           <span>All</span> -->
-          <button @click="set_accepted('acc')">All</button>
-          <div v-for= "r in notifications">
-    
-            <div v-if= "((r.accepted == show_accepted) || show_all)">
-                <!-- here you display the notification r -->
-         
-            </div>
-     
-          </div>
-          
+          <button class = "tablinks" onclick = "contents(event, 'All')" button @click="set_accepted('acc')">All</button>
         </a>
-      </li>
+        </li>
       <li>
         <a>
           <!-- <span class="icon is-small"></span>
           <span>Pending</span> -->
-          <button @click="set_accepted('acc')">Pending</button>
+          <button class = "tablinks" onclick = "contents(event, 'Pending')" button @click="set_accepted('acc')">Pending</button>
+        
         </a>
       </li>
       <li>
         <a>
           <!-- <span class="icon is-small"></span>
           <span>Accepted</span> -->
-          <button @click="set_accepted('acc')">Accepted</button>
+          <button class = "tablinks" onclick = "contents(event, 'Accepted')" button @click="set_accepted('acc')">Accepted</button>
+         
         </a>
       </li>
       
     </ul>
    </div>
-   
+<!-- Tab content -->
+<div id="All" class="tabcontent">
+  <h3>All notifications</h3>
+  <div v-for= "r in notifications">
+    <div v-if="((r.accepted === show_accepted) || show_all)">
+      <!-- here you display the notification r -->
+      
+    </div>
+  
+  </div>
+  
 </div>
+
+<div id="Pending" class="tabcontent">
+  <h3>Pending notifications</h3>
+  <div v-for= "r in notifications">
+    <div v-if="((r.accepted === show_accepted) || show_all)">
+      <!-- here you display the notification r -->
+      
+    </div>
+  
+  </div>
+</div>
+
+<div id="Accepted" class="tabcontent">
+  <h3>Accepted notifications</h3>
+    <div v-for= "r in notifications">
+    <div v-if="((r.accepted === show_accepted) || show_all)">
+      <!-- here you display the notification r -->
+      
+    </div>
+  
+  </div>
+</div>  
+</div>
+
   [[block page_scripts]]
   <!-- Loads the index-specific js for Vue -->
   <script>
