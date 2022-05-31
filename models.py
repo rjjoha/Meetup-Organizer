@@ -63,7 +63,5 @@ db.define_table(
 
 db.event.id.readable = db.event.id.writable = False
 db.profile.id.readable = db.profile.id.writable = False
-db.event.user_email.readable = db.event.user_email.writable = False
-db.profile.user_email.readable = db.profile.user_email.writable = False
 
 db.commit()
