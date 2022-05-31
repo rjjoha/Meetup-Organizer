@@ -30,8 +30,8 @@ db.define_table(
     Field('event_description', requires=IS_NOT_EMPTY()),
     Field('event_date', 'date'),
     Field('event_attachment', 'upload'),
-    Field('user_email', default=get_user_email),
-    Field('invite_user'),
+    Field('invite_users'),
+    Field('event_creator', default=get_user_email),
     # Field('pending_invite', 'list:reference profile'),
     # Field('accepted_invite', 'list:reference profile'),
 )
@@ -54,6 +54,7 @@ db.define_table(
 
 db.define_table(
     'invite',
+    Field('event_invited', 'reference event'),
     Field('inviter', default=get_user_email),
     Field('invitee') #email
 )
