@@ -15,6 +15,8 @@ let init = (app) => {
         add_event_location: "",
         add_event_description: "",
         add_event_attachment: "",
+        add_event_creator: "",
+        add_event_pending_list: [],
         rows: [],
     };
 
@@ -33,6 +35,7 @@ let init = (app) => {
                 event_location: app.vue.add_event_location,
                 event_description: app.vue.add_event_description,
                 event_attachment: app.vue.add_event_attachment,
+                event_pending_list: app.vue.add_event_pending_list,
             }).then(function (response) {
             app.vue.rows.push({
                 id: response.data.id,
@@ -41,6 +44,7 @@ let init = (app) => {
                 event_location: app.vue.add_event_location,
                 event_description: app.vue.add_event_description,
                 event_attachment: app.vue.add_event_attachment,
+                event_pending_list: app.vue.add_event_pending_list,
             });
             app.enumerate(app.vue.rows);
             app.reset_form();

@@ -45,7 +45,7 @@ def index():
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
-    rows = db(db.event.user_email == get_user_email()).select()
+    rows = db(db.pending.pending_invitee == get_user_email()).select()
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('create_event')
@@ -72,7 +72,15 @@ def add_event():
         event_location=request.json.get('event_location'),
         event_description=request.json.get('event_description'),
         event_attachment=request.json.get('event_attachment'),
+        event_creator=get_user_email(),
     )
+    mylist = request.json.get('event_pending_list'),
+    for names in mylist:
+        db.pending.insert(
+            pending_inviter=get_user_email(),
+            pending_invitee=names,
+            event_pending=id,
+        )
     return dict(id=id)
 
 

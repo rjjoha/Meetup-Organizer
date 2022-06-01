@@ -31,7 +31,7 @@ db.define_table(
     Field('event_date', 'date'),
     Field('event_attachment', 'upload'),
     Field('invite_users'),
-    Field('event_creator', default=get_user_email),
+    Field('event_creator', default=get_user_email, requires=IS_NOT_EMPTY()),
 )
 
 db.define_table(
@@ -57,7 +57,7 @@ db.define_table(
 db.define_table(
     'pending',
     Field('event_pending', 'reference event'),
-    Field('pending_inviter'), #event creator
+    Field('pending_inviter', default=get_user_email), #event creator
     Field('pending_invitee'), #person waiting to accept invite
 )
 
