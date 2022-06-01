@@ -1,13 +1,25 @@
 [[extend 'layout.html']]
 
+<style>
+  [v-cloak]{
+    display: none;
+  }
+</style>
+
 
 <div class="container is-max-widescreen">
-  <section class="section">
+  <section class="section" id="vue-target" v-cloak>
     <div class="block">
       <div class="box has-background-link is-medium">
 
         <div class="columns is-vcentered">
-          <h1 class="title" style="color:white">Some Event Title</h1>
+          <figure class="image is-128x128">
+            <img src="INSERT DB IMAGE REFERENCE URL">
+          </figure>
+          <h1 class="title" style="color:white">[[=title]]</h1>
+        </div>
+        <div>
+          <p style="color:white">[[=location]], [=date]]</p>
         </div>
       </div>
       
@@ -15,27 +27,33 @@
         <div class="control">
           <div class="select is-fullwidth is-info is-outlined">
             <select>
-              <option>Announcment</option>
-              <option>Poll</option>
-              <option>Calendar</option>
+              <option @click="set_add_status(true)">Announcment</option>
             </select>
           </div>
         </div>
       </div>
-      <div class="field">
-        <div class="control">
-          <textarea class="textarea" placeholder="Announcment..."></textarea>
+      <span v-if="add_mode">
+        <div class="field">
+          <div class="control">
+            <div>
+              <input type="text" v-model="add_title" class="input" placeholder="Title...">
+            </div>
+            <div>
+              <textarea class="textarea" v-model="add_body" placeholder="Announcment..."></textarea>
+            </div>
+            
+          </div>
         </div>
-      </div>
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-primary">Submit</button>
+        <div class="field is-grouped">
+          <div class="control">
+            <input @click="add_post" class="button is-primary" value="Submit" class="button is-primary">
+          </div>
+          <div class="control">
+            <input @click="set_add_status(false)" value="Cancel" class="button is-link is-light">
+          </div>
         </div>
-        <div class="control">
-          <button class="button is-link is-light">Cancel</button>
-        </div>
-      </div>
-
+      </span>
+      
       <div class="card">
         <header class="card-header">
           <p class="card-header-title">
@@ -85,6 +103,5 @@
 </div>
 
 [[block page_scripts]]
-<script src="js/jquery-3.6.0.js"></script>
-<script src="js/index.js"></script>
+<script src="js/event.js"></script>
 [[end]]

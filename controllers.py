@@ -150,7 +150,7 @@ def index():
    
         # COMPLETE: return here any signed URLs you need.
         user = auth.get_user()
-        rows = db(db.event.user_email == get_user_email()).select()
+        rows = db(db.event.event_creator == get_user_email()).select()
         s = user
      
         return dict(
@@ -174,12 +174,29 @@ def splash_page():
 @action("event")
 @action.uses("event.html", db, auth)
 def edit_event():
-    return dict()
+    event = db(db.invite.invitee == get_user_email()).select().first()
+    if(event is None):
+        redirect("create_event")
+    event = event.event_invited
+    title = event.event_title
+    icon = event.event_image
+    location = event.event_location
+    date = event.event_date
+    attachment = event.event_attachment
+    id = event.id
+
+    return dict(title=title, 
+                icon=icon, 
+                location=location,
+                date=date, 
+                attachment=attachment, 
+                id=id)
 
 @action("edit_event")
 @action.uses("edit_event.html", db, auth)
 def edit_event():
     return dict()
+
     
 @action("account_settings")
 @action.uses("account_settings.html", db, auth)
