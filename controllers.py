@@ -45,7 +45,7 @@ def index():
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
-        rows = db(db.pending.pending_invitee == get_user_email()).select()
+    rows = db(db.pending.pending_invitee == get_user_email()).select()
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('create_event')
@@ -145,7 +145,7 @@ def delete_event():
 #     s = user
 #     return dict(rows=rows, url_signer=url_signer, s = s)
 @action('notifications')
-@action.uses(db, auth, 'notifications.html', url_signer)
+@action.uses(db, auth, 'notifications.html', url_signer,auth.user)
 def index():
    
         # COMPLETE: return here any signed URLs you need.
@@ -161,6 +161,17 @@ def index():
             rows=rows, url_signer=url_signer, s = s)
     
 
+@action('accepted',method='POST')
+@action.uses(url_signer.verify(), db, auth.user)
+def accepted():
+    eventid = request.params.get('eventid') 
+    row = db((db.pending.event_pending == eventid) ).select().first()
+    
+    db((db.pending.event_pending == eventid)).update(
+        # have to remove the request.json.get('accepted') from pending invitee
+        pending_invitee = request.json.get('accepted')
+    )
+    return dict()
 
 #############    end    ##############
 

@@ -15,8 +15,9 @@
   <div class="tabs is-boxed is-centered">
     <ul>
       <li :class="{'is-active': tab==='all'}"><a @click="set_tab('all')">All</a></li>
-      <li :class="{'is-active': tab==='pending'}"><a @click="set_tab('pending')">Pending</a></li>
       <li :class="{'is-active': tab=== 'accepted'}"><a @click="set_tab( 'accepted')">Accepted</a></li>
+      <li :class="{'is-active': tab==='pending'}"><a @click="set_tab('pending')">Pending</a></li>
+      
     </ul>
    
    </div>
@@ -31,20 +32,31 @@
     
       <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
 
-      <p>{{r.event_description}}</p>
+      <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
+      <input type="submit" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
+      
     </div>
  
   
   </div>
   
 </div>
-</div>
+
 <div v-if="tab==='pending'" >
-  <h3>Pending notifications</h3>
   
-  <div v-for= "r in rows">
-    <div v-if="((r.accepted === show_accepted) || show_all)">
-      <!-- here you display the notification r -->
+  
+  <div v-for="r in rows.slice().reverse()">
+    <div v-if= "!r.accepted" >
+      <div class="notification mb-5">
+        <p class="title is-3 is-spaced"> Event title : {{r.event_title}}</p>
+      
+        <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
+  
+        <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
+        <input type="submit" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
+        
+      </div>
+    
       
     </div>
   
@@ -52,21 +64,32 @@
 </div>
 
 <div v-if="tab==='accepted'" >
-  <h3>Accepted notifications</h3>
-    <div v-for= "r in rows">
-    <div v-if="((r.accepted === show_accepted) || show_all)">
+  <!-- <h3>Accepted notifications</h3> -->
+  <div v-for="r in rows.slice().reverse()">
+    <!-- {{r.accepted}} -->
+    <div v-if= "r.accepted" >
       <!-- here you display the notification r -->
       
+        <div class="notification mb-5">
+          <p class="title is-3 is-spaced"> Event title : {{r.event_title}}</p>
+        
+          <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
+    
+          <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
+    
+        </div>
     </div>
   
   </div>
 </div>  
 </div>
+</div>  
 
   [[block page_scripts]]
   
   <script>
      let load_events_url = "[[=XML(load_events_url)]]";
+     let accepted_url = "[[=XML(accepted_url)]]";
   </script>
   <script src="js/notifications.js"></script>
   [[end]]

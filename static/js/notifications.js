@@ -10,6 +10,7 @@ let init = (app) => {
     app.data = {
         // Complete as you see fit.
         show_accepted: false,
+        
         show_all: false,
         rows: [],
         tab: "all",
@@ -21,7 +22,16 @@ let init = (app) => {
         a.map((e) => {e._idx = k++;});
         return a;
     };
+    app.acceptInit = posts => {
+        posts.map((post) => {
+            post.accepted = false; 
 
+        })
+    }
+    app.addAccept = function (idx){
+        let post = app.vue.rows[idx]
+        post.accepted = true 
+    };
 
     app.set_accepted = function (b){
         if (b != 'all') {
@@ -41,6 +51,8 @@ let init = (app) => {
         // Complete as you see fit.
         set_accepted: app.set_accepted,
         set_tab: app.set_tab,
+        addAccept: app.addAccept,
+        
     };
 
     // This creates the Vue instance.
@@ -56,9 +68,19 @@ let init = (app) => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
         // this would be replaced the events invited
+        
         axios.get(load_events_url).then(function (response) {
             app.vue.rows = app.enumerate(response.data.rows);
+            let posts = response.data.rows; 
+            app.acceptInit(posts);
             
+        })
+        .then(() => {
+            for(let row of app.vue.rows){
+                axios.get(accepted_url, {params: {eventid: row.id}}).then ((response) => {
+                    row.accepted = response.data.accepted; 
+                });
+            }
         });
         
     };
