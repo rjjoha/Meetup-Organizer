@@ -145,15 +145,14 @@ def delete_event():
 #     s = user
 #     return dict(rows=rows, url_signer=url_signer, s = s)
 @action('notifications')
-@action.uses(db, auth, 'notifications.html')
+@action.uses(db, auth, 'notifications.html', url_signer)
 def index():
    
         # COMPLETE: return here any signed URLs you need.
         user = auth.get_user()
-        rows = db(db.event).select().as_list()
+        rows = db(db.event.event_creator == get_user_email()).select()
         s = user
-       
-      
+     
         return dict(
             all_url = URL('all', signer=url_signer),
             pending_url = URL('pending', signer=url_signer),
