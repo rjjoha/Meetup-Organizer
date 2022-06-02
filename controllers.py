@@ -81,6 +81,13 @@ def add_event():
             pending_invitee=names,
             event_pending=id,
         )
+
+    db.invite.insert(
+        event_invited = id,
+        inviter = get_user_email(),
+        invitee = request.json.get('invitee'),
+        
+    )
     return dict(id=id)
 
 
@@ -146,7 +153,7 @@ def delete_event():
 #     return dict(rows=rows, url_signer=url_signer, s = s)
 @action('notifications')
 @action.uses(db, auth, 'notifications.html', url_signer,auth.user)
-def index():
+def notifications():
    
         # COMPLETE: return here any signed URLs you need.
         user = auth.get_user()
@@ -155,23 +162,51 @@ def index():
      
         return dict(
             all_url = URL('all', signer=url_signer),
-            pending_url = URL('pending', signer=url_signer),
-            accepted_url = URL('accepted', signer=url_signer),
+            set_accepted_url = URL('set_accepted', signer=url_signer),
+            get_accepted_url = URL('accepted', signer=url_signer),
             
             rows=rows, url_signer=url_signer, s = s)
     
 
-@action('accepted',method='POST')
+@action('set_accepted', method='POST')
+@action.uses(db, auth.user, url_signer.verify())
+def set_accepted():
+  
+    eventid = request.json.get('eventid')
+    row = db((db.invite.event_invited == eventid) ).select().first()
+    email = get_user_email()
+    
+   
+    if row is not None:
+        if (email not in row.invitee ):
+            row.invitee += email
+            
+            
+            db((db.invite.event_invited == eventid) ).update(
+                invitee = row.invitee 
+
+            )
+            
+
+        row.update_record()
+        
+
+   
+    return "ok"
+
+@action('accepted')
 @action.uses(url_signer.verify(), db, auth.user)
 def accepted():
     eventid = request.params.get('eventid') 
-    row = db((db.pending.event_pending == eventid) ).select().first()
+    row = db((db.invite.event_invited == eventid) ).select().first()
+    email = get_user_email() 
+    accepted = False 
+    if (email in row.invitee ):
+        accepted = True
     
-    db((db.pending.event_pending == eventid)).update(
-        # have to remove the request.json.get('accepted') from pending invitee
-        pending_invitee = request.json.get('accepted')
-    )
-    return dict()
+    
+
+    return dict(accepted = accepted)
 
 @action('all')
 @action.uses(url_signer.verify(), db)
@@ -179,7 +214,7 @@ def all():
     rows = db(db.event).select().as_list()
     pending = []
     email = get_user_email() 
-    print("email is ", email)
+    
     for r in rows: 
         row =  db((db.pending.event_pending == r['id']) ).select().first()
         if(email in row.pending_invitee and r['event_creator'] != email ):

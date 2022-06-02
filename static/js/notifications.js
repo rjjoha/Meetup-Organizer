@@ -31,15 +31,14 @@ let init = (app) => {
     app.addAccept = function (idx){
         let post = app.vue.rows[idx]
         post.accepted = true 
+        axios.post(set_accepted_url, {
+
+            eventid : post.id
+        });
     };
 
     app.set_accepted = function (b){
-        if (b != 'all') {
-        app.vue.show_accepted = (b == 'acc');
-        app.vue.show_all = false;
-       } else {
-        app.vue.show_all = true;
-        } 
+       
     };
     
     app.set_tab = function (new_tab) {
@@ -77,7 +76,7 @@ let init = (app) => {
         })
         .then(() => {
             for(let row of app.vue.rows){
-                axios.get(accepted_url, {params: {eventid: row.id}}).then ((response) => {
+                axios.get(get_accepted_url, {params: {eventid: row.id}}).then ((response) => {
                     row.accepted = response.data.accepted; 
                 });
             }
