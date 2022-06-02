@@ -29,9 +29,9 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
-        show_accepted : false,
-        show_all : false,
-        notifications : []
+        show_accepted: false,
+        show_all: false,
+        rows: [],
     };
 
     app.enumerate = (a) => {
@@ -41,19 +41,21 @@ let init = (app) => {
         return a;
     };
 
-    app.set_accepted = function (b) {
+
+    app.set_accepted = function (b){
         if (b != 'all') {
         app.vue.show_accepted = (b == 'acc');
         app.vue.show_all = false;
-    } else {
+       } else {
         app.vue.show_all = true;
         } 
-    }
+    };
     
     
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        set_accepted: app.set_accepted,
     };
 
     // This creates the Vue instance.
@@ -68,6 +70,12 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
+        // this would be replaced the events invited
+        axios.get(load_events_url).then(function (response) {
+            app.vue.rows = app.enumerate(response.data.rows);
+            
+        });
+        
     };
 
     // Call to the initializer.

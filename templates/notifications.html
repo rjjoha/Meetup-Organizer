@@ -45,19 +45,22 @@
 <!-- Tab content -->
 <div id="All" class="tabcontent">
   <h3>All notifications</h3>
-  <div v-for= "r in notifications">
-    <div v-if="((r.accepted === show_accepted) || show_all)">
-      <!-- here you display the notification r -->
-      
+  
+  <div v-for="r in rows.slice().reverse()">
+
+    <div class="notification mb-5">
+      <p>{{r.event_title}}</p>
     </div>
+ 
   
   </div>
   
 </div>
-
+</div>
 <div id="Pending" class="tabcontent">
   <h3>Pending notifications</h3>
-  <div v-for= "r in notifications">
+  
+  <div v-for= "r in rows">
     <div v-if="((r.accepted === show_accepted) || show_all)">
       <!-- here you display the notification r -->
       
@@ -68,7 +71,7 @@
 
 <div id="Accepted" class="tabcontent">
   <h3>Accepted notifications</h3>
-    <div v-for= "r in notifications">
+    <div v-for= "r in rows">
     <div v-if="((r.accepted === show_accepted) || show_all)">
       <!-- here you display the notification r -->
       
@@ -79,13 +82,9 @@
 </div>
 
   [[block page_scripts]]
-  <!-- Loads the index-specific js for Vue -->
-  <script>
-    // put what's defined in controllers.py file 
-    let all_url = "[[=XML(all_url)]]";
-    let pending_url  = "[[=XML(pending_url )]]";
-    let accepted_url = "[[=XML(accepted_url)]]";
   
+  <script>
+     let load_events_url = "[[=XML(load_events_url)]]";
   </script>
   <script src="js/notifications.js"></script>
   [[end]]

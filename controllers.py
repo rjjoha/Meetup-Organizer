@@ -150,13 +150,15 @@ def index():
    
         # COMPLETE: return here any signed URLs you need.
         user = auth.get_user()
-        rows = db(db.event.event_creator == get_user_email()).select()
+        rows = db(db.event).select().as_list()
         s = user
-     
+       
+      
         return dict(
             all_url = URL('all', signer=url_signer),
             pending_url = URL('pending', signer=url_signer),
             accepted_url = URL('accepted', signer=url_signer),
+            load_events_url = URL('load_events', signer=url_signer),
             rows=rows, url_signer=url_signer, s = s)
     
 
