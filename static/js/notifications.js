@@ -69,7 +69,7 @@ let init = (app) => {
         // Typically this is a server GET call to load the data.
         // this would be replaced the events invited
         
-        axios.get(load_events_url).then(function (response) {
+        axios.get(all_url).then(function (response) {
             app.vue.rows = app.enumerate(response.data.rows);
             let posts = response.data.rows; 
             app.acceptInit(posts);

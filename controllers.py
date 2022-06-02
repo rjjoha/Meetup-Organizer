@@ -45,7 +45,7 @@ def index():
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
-    rows = db(db.pending.pending_invitee == get_user_email()).select()
+    rows = db(db.pending.pending_inviter == get_user_email()).select()
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('create_event')
@@ -157,7 +157,7 @@ def index():
             all_url = URL('all', signer=url_signer),
             pending_url = URL('pending', signer=url_signer),
             accepted_url = URL('accepted', signer=url_signer),
-            load_events_url = URL('load_events', signer=url_signer),
+            
             rows=rows, url_signer=url_signer, s = s)
     
 
@@ -173,6 +173,20 @@ def accepted():
     )
     return dict()
 
+@action('all')
+@action.uses(url_signer.verify(), db)
+def all():
+    rows = db(db.event).select().as_list()
+    pending = []
+    email = get_user_email() 
+    print("email is ", email)
+    for r in rows: 
+        row =  db((db.pending.event_pending == r['id']) ).select().first()
+        if(email in row.pending_invitee and r['event_creator'] != email ):
+            pending.append(r)
+            
+    return dict(rows=pending)
+    
 #############    end    ##############
 
 #############Robert Johansen###############
