@@ -45,7 +45,7 @@ def index():
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
-    rows = db(db.event.user_email == get_user_email()).select()
+    rows = db(db.event.event_creator == get_user_email()).select()
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('create_event')
@@ -137,20 +137,23 @@ def delete_event():
 #     s = user
 #     return dict(rows=rows, url_signer=url_signer, s = s)
 @action('notifications')
-@action.uses(db, auth, 'notifications.html')
-def index():
+@action.uses(db, auth, 'notifications.html', url_signer)
+def notifications():
    
         # COMPLETE: return here any signed URLs you need.
         user = auth.get_user()
-        rows = db(db.event.user_email == get_user_email()).select()
+        # this would be replaced by events the user was invited 
+        rows = db(db.event).select().as_list()
         s = user
-     
+      
         return dict(
-            all_url = URL('all', signer=url_signer),
-            pending_url = URL('pending', signer=url_signer),
-            accepted_url = URL('accepted', signer=url_signer),
+                 load_events_url = URL('load_events', signer=url_signer),
+            # all_url = URL('all', signer=url_signer),
+            # pending_url = URL('pending', signer=url_signer),
+            # accepted_url = URL('accepted', signer=url_signer),
             rows=rows, url_signer=url_signer, s = s)
-    
+
+       
 
 
 #############    end    ##############
