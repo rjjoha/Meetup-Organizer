@@ -53,3 +53,63 @@ CREATE TABLE "profile"(
 success!
 success!
 success!
+timestamp: 2022-05-30T20:13:42.939824
+ALTER TABLE "event" ADD "event_date" DATE;
+timestamp: 2022-05-30T20:13:42.949832
+ALTER TABLE "event" ADD "invite_user" CHAR(512);
+success!
+timestamp: 2022-05-30T20:13:42.966848
+ALTER TABLE "profile" ADD "profile_image" CHAR(512);
+timestamp: 2022-05-30T20:13:42.972853
+ALTER TABLE "profile" ADD "profile_hobbies" CHAR(512);
+timestamp: 2022-05-30T20:13:42.977858
+ALTER TABLE "profile" ADD "profile_location" CHAR(512);
+timestamp: 2022-05-30T20:13:42.984864
+ALTER TABLE "profile" ADD "notification" CHAR(512);
+success!
+timestamp: 2022-05-30T20:13:42.992872
+CREATE TABLE "invite"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "inviter" CHAR(512),
+    "invitee" CHAR(512)
+);
+success!
+success!
+success!
+timestamp: 2022-05-30T20:20:40.194614
+ALTER TABLE "invite" ADD "event_invited" INTEGER REFERENCES "event" ("id") ON DELETE CASCADE  ;
+success!
+timestamp: 2022-05-30T20:57:54.769883
+ALTER TABLE "event" ADD "invite_users" CHAR(512);
+timestamp: 2022-05-30T20:57:54.775976
+ALTER TABLE "event" ADD "event_creator" CHAR(512);
+success!
+success!
+timestamp: 2022-05-30T20:57:54.800998
+CREATE TABLE "pending"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "event_pending" INTEGER REFERENCES "event" ("id") ON DELETE CASCADE  ,
+    "pending_inviter" CHAR(512),
+    "pending_invitee" CHAR(512)
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
