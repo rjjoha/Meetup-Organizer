@@ -14,42 +14,24 @@
   <!-- Put here your Vue.js template -->
   <div class="tabs is-boxed is-centered">
     <ul>
-      <li>
-        <a>
-      <!-- <li class="is-active"> -->
-      
-          <!-- <span class="icon is-small"></span>
-          <span>All</span> -->
-          <button class = "tablinks" onclick = "contents(event, 'All')" button @click="set_accepted('acc')">All</button>
-        </a>
-        </li>
-      <li>
-        <a>
-          <!-- <span class="icon is-small"></span>
-          <span>Pending</span> -->
-          <button class = "tablinks" onclick = "contents(event, 'Pending')" button @click="set_accepted('acc')">Pending</button>
-        
-        </a>
-      </li>
-      <li>
-        <a>
-          <!-- <span class="icon is-small"></span>
-          <span>Accepted</span> -->
-          <button class = "tablinks" onclick = "contents(event, 'Accepted')" button @click="set_accepted('acc')">Accepted</button>
-         
-        </a>
-      </li>
-      
+      <li :class="{'is-active': tab==='all'}"><a @click="set_tab('all')">All</a></li>
+      <li :class="{'is-active': tab==='pending'}"><a @click="set_tab('pending')">Pending</a></li>
+      <li :class="{'is-active': tab=== 'accepted'}"><a @click="set_tab( 'accepted')">Accepted</a></li>
     </ul>
+   
    </div>
 <!-- Tab content -->
-<div id="All" class="tabcontent">
-  <h3>All notifications</h3>
+<div v-if="tab==='all'">
+ 
   
   <div v-for="r in rows.slice().reverse()">
 
     <div class="notification mb-5">
-      <p>{{r.event_title}}</p>
+      <p class="title is-3 is-spaced"> Event title : {{r.event_title}}</p>
+    
+      <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
+
+      <p>{{r.event_description}}</p>
     </div>
  
   
@@ -57,7 +39,7 @@
   
 </div>
 </div>
-<div id="Pending" class="tabcontent">
+<div v-if="tab==='pending'" >
   <h3>Pending notifications</h3>
   
   <div v-for= "r in rows">
@@ -69,7 +51,7 @@
   </div>
 </div>
 
-<div id="Accepted" class="tabcontent">
+<div v-if="tab==='accepted'" >
   <h3>Accepted notifications</h3>
     <div v-for= "r in rows">
     <div v-if="((r.accepted === show_accepted) || show_all)">

@@ -1,26 +1,6 @@
 // This will be the object that will contain the Vue attributes
 // and be used to initialize it.
 let app = {};
-function contents(evt, action) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-  
-    
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-  
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace("active", "");
-    }
-  
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(action).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
 
 // Given an empty app object, initializes it filling its attributes,
 // creates a Vue instance, and then initializes the Vue instance.
@@ -32,6 +12,7 @@ let init = (app) => {
         show_accepted: false,
         show_all: false,
         rows: [],
+        tab: "all",
     };
 
     app.enumerate = (a) => {
@@ -51,11 +32,15 @@ let init = (app) => {
         } 
     };
     
+    app.set_tab = function (new_tab) {
+        app.vue.tab = new_tab;
+    };
     
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
         set_accepted: app.set_accepted,
+        set_tab: app.set_tab,
     };
 
     // This creates the Vue instance.
