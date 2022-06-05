@@ -99,8 +99,8 @@ auth_button_classes = {
 
 auth.use_username = True
 auth.param.button_classes = auth_button_classes
-auth.param.registration_requires_confirmation = settings.VERIFY_EMAIL
-auth.param.registration_requires_approval = settings.REQUIRES_APPROVAL
+auth.param.registration_requires_confirmation = False
+auth.param.registration_requires_approval = False
 auth.param.login_after_registration = settings.LOGIN_AFTER_REGISTRATION
 auth.param.allowed_actions = settings.ALLOWED_ACTIONS
 auth.param.login_expiration_time = 3600

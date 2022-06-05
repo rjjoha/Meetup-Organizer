@@ -49,7 +49,7 @@ def index():
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('create_event')
-@action.uses('create_event.html', url_signer)
+@action.uses('create_event.html', url_signer, auth.user, db)
 def create_event():
     return dict(
         image_upload_url = URL('image_upload', signer=url_signer),
