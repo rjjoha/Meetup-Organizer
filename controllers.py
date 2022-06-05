@@ -52,6 +52,8 @@ def index():
 @action.uses('create_event.html', url_signer)
 def create_event():
     return dict(
+        image_upload_url = URL('image_upload', signer=url_signer),
+        attachment_upload_url = URL('attachment_upload', signer=url_signer),
         load_events_url = URL('load_events', signer=url_signer),
         add_event_url = URL('add_event', signer=url_signer),
         delete_event_url = URL('delete_event', signer=url_signer),

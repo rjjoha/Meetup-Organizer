@@ -25,7 +25,7 @@ def get_time():
 db.define_table(
     'event',
     Field('event_title', requires=IS_NOT_EMPTY()),
-    Field('event_image', 'upload'),
+    Field('event_image'),
     Field('event_location', requires=IS_NOT_EMPTY()),
     Field('event_description', requires=IS_NOT_EMPTY()),
     Field('event_date', 'date'),
