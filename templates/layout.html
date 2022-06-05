@@ -14,7 +14,7 @@
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="[[=URL('index')]]">
-          Learn py4web
+          Meetup Organizer
           <!-- <img class="logo" width="150" src="images/site_icon.png"> -->
         </a>
 
@@ -29,6 +29,7 @@
 
       <div id="the-navbar-menu" class="navbar-menu">
         <div class="navbar-start">
+          [[if globals().get('user'):]]
           [[block page_menu_items]]
           <a class="navbar-link" href="[[=URL('event')]]">
             Events
@@ -46,6 +47,7 @@
             <!-- Notifications
           </a> -->
           [[end]]
+          [[pass]]
         </div>
 
         <div class="navbar-end">
