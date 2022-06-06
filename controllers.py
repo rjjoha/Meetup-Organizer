@@ -81,9 +81,10 @@ def add_event():
     for names in mylist:
         db.pending.insert(
             pending_inviter=get_user_email(),
-            pending_invitee=names,
+            pending_invitee= names,
             event_pending=id,
         )
+        print(names)
 
     db.invite.insert(
         event_invited = id,
@@ -155,7 +156,7 @@ def delete_event():
 #     s = user
 #     return dict(rows=rows, url_signer=url_signer, s = s)
 @action('notifications')
-@action.uses(db, auth, 'notifications.html', url_signer,auth.user)
+@action.uses('notifications.html', url_signer, auth.user, db)
 def notifications():
    
         # COMPLETE: return here any signed URLs you need.
@@ -183,17 +184,19 @@ def set_accepted():
     if row.invitee is not None:
         print(row)
         if (email not in row.invitee ):
-            row.invitee += email
+            # row.invitee.append(email)
+            print(email)
+            print(row.invitee )
+            row.update_record()
             
-            
-            db((db.invite.event_invited == eventid) ).update(
-                invitee = row.invitee 
+            # db((db.invite.event_invited == eventid) ).update(
+            #     invitee = row.invitee 
 
-            )
-        row.update_record()
+            # )
+       
     else: 
-        row.invitee  = []
-        row.invitee.append(email)
+        row.invitee  = email
+        
         row.update_record()
 
    
