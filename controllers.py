@@ -94,12 +94,13 @@ def add_event():
     # for row in rows:
     #     print(row)
     for names in extractlist:
-        db.invite.insert(
-                event_invited = id,
-                inviter = get_user_email(),
-                invitee = request.json.get('invitee'),
-                
-        )
+        if id.event_creator != names: 
+            db.invite.insert(
+                    event_invited = id,
+                    inviter = get_user_email(),
+                    invitee = request.json.get('invitee'),
+                    
+            )
     return dict(id=id)
 
 
