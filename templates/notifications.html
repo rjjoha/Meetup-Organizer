@@ -33,9 +33,12 @@
       <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
 
       <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
+      <div v-if= "!r.accepted" >
       <input type="submit" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
+      </div>
       
     </div>
+
  
   
   </div>
@@ -56,6 +59,7 @@
         <input type="submit" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
         
       </div>
+
     
       
     </div>
@@ -76,7 +80,7 @@
           <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
     
           <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
-    
+       
         </div>
     </div>
   

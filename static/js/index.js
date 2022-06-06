@@ -32,6 +32,9 @@ let init = (app) => {
         add_event_creator: "",
         add_event_pending_list: [],
         rows: [],
+
+        // initializing invitee
+        invitee :  [],
     };
     
     app.image = null;
@@ -131,6 +134,7 @@ let init = (app) => {
                 event_description: app.vue.add_event_description,
                 event_attachment: app.vue.add_event_attachment,
                 event_pending_list: app.vue.add_event_pending_list,
+                invitee :  app.vue.invitee,
             }).then(function (response) {
             app.vue.rows.push({
                 id: response.data.id,
@@ -140,6 +144,7 @@ let init = (app) => {
                 event_description: app.vue.add_event_description,
                 event_attachment: app.vue.add_event_attachment,
                 event_pending_list: app.vue.add_event_pending_list,
+                invitee :  app.vue.invitee,
             });
             app.enumerate(app.vue.rows);
             app.reset_form();

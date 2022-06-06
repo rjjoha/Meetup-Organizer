@@ -180,7 +180,8 @@ def set_accepted():
     email = get_user_email()
     
    
-    if row is not None:
+    if row.invitee is not None:
+        print(row)
         if (email not in row.invitee ):
             row.invitee += email
             
@@ -189,10 +190,11 @@ def set_accepted():
                 invitee = row.invitee 
 
             )
-            
-
         row.update_record()
-        
+    else: 
+        row.invitee  = []
+        row.invitee.append(email)
+        row.update_record()
 
    
     return "ok"
@@ -204,8 +206,9 @@ def accepted():
     row = db((db.invite.event_invited == eventid) ).select().first()
     email = get_user_email() 
     accepted = False 
-    if (email in row.invitee ):
-        accepted = True
+    if row.invitee is not None:
+        if (email in row.invitee ):
+            accepted = True
     
     
 
