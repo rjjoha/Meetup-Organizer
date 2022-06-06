@@ -1,114 +1,119 @@
 [[extend 'layout.html']]
 
-<body>
-    <div class="container is-max-widescreen">
-      <section class="section">
-        <div class="block">
-          <div class="columns">
-            <div class="column is-narrow">
-              <figure class="image is-128x128">
-                <img src="INSERT DB IMAGE REFERENCE URL">
-              </figure>
-  
-            </div>
-            <div class="column is-narrow">
-              <div class="columns">
-                <div class="column is-narrow">
-                  <h1 class="title">Username</h1>
-                </div>
-                <div class="column is-narrow">
-                  <a class="button is-info"  href="[[=URL('account_settings')]]">
-                    <span>Settings</span>
-                  </a>
-                </div>
-              </div>
-              <p class="subtitle">Description about the user, hobbies, interests, rough location</p>
-            </div>
+
+<style>
+[v-cloak] {
+  display: none;
+}
+</style>
+
+<div class="section" id="vue-target" v-cloak></div>
+  <div class="container is-max-widescreen">
+    <section class="section">
+      <div class="block">
+        <div class="columns">
+          <div class="column is-narrow">
+            <figure class="image is-128x128">
+              <img src="INSERT DB IMAGE REFERENCE URL">
+            </figure>
+
           </div>
-  
-          <div class="columns">
-            <div class="column is-one-quarter">
-              <div class="box has-background-danger is-medium">
-                <aside class="menu">
-                  <p class="menu-label">
-                    Notifications
-                  </p>
-                  <ul class="menu-list">
-                    <li><a>Notification 1</a></li>
-                    <li><a>Notification 2</a></li>
-                    <li><a>Notification 3</a></li>
-                    <li><a>Notification 4</a></li>
-                    <li><a>Notification 5</a></li>
-                  </ul>
-                </aside>
-               </div>
-            </div>
-            <div class="column">
-              <div class="block">
-                <div class="card">
-                  <header class="card-header">
-                    <figure class=" card-header-icon image is-64x64">
-                      <img src="INSERT DB IMAGE REFERENCE URL">
-                    </figure>
-                    <p class="card-header-title">
-                      Event 1
-                    </p>
-                    <button class="card-header-icon">
-                      <span class="icon">
-                        <i class="fas fa-angle-down"></i>
-                      </span>
-                    </button>
-                  </header>
-     
-                </div>
-    
-                <div class="card">
-                  <header class="card-header">
-                    <figure class=" card-header-icon image is-64x64">
-                      <img src="INSERT DB IMAGE REFERENCE URL">
-                    </figure>
-                    <p class="card-header-title">
-                      Event 2
-                    </p>
-                    <button class="card-header-icon">
-                      <span class="icon">
-                        <i class="fas fa-angle-down"></i>
-                      </span>
-                    </button>
-                  </header>
-     
-                </div>
-    
-                <div class="card">
-                  <header class="card-header">
-                    <figure class=" card-header-icon image is-64x64">
-                      <img src="INSERT DB IMAGE REFERENCE URL">
-                    </figure>
-                    <p class="card-header-title">
-                      Event 3
-                    </p>
-                    <button class="card-header-icon">
-                      <span class="icon">
-                        <i class="fas fa-angle-down"></i>
-                      </span>
-                    </button>
-                  </header>
-     
-                </div>
+          <div class="column is-narrow">
+            <div class="columns">
+              <div class="column is-narrow">
+                <h1 class="title">[[=message]]</h1>
               </div>
-              
-  
+              <div class="column is-narrow">
+                <a class="button is-info"  href="[[=URL('account_settings')]]">
+                  <span>Settings</span>
+                </a>
+              </div>
             </div>
+            <p class="subtitle">Description about the user, hobbies, interests, rough location</p>
           </div>
-         
-  
-        
-  
-          
         </div>
-      </section>
-    </div>
-  
-          
-   
-  </body>
+
+        <div class="columns">
+          <div class="column">
+            <div class="block">
+              <h1 class="title">Events</h1>
+              <table class="table is-striped is-fullwidth">
+                <tr>
+                  <th>Event Title</th>
+                  <th>Event Image</th>
+                  <th>Event Location</th>
+                  <th>Event Description</th>
+                  <th>Event Attachment</th>
+                  <th></th>
+                </tr>
+                <tr v-for="r in rows">
+                  <td>{{r.event_title}}</td>
+                  <td>{{r.event_image}}</td>
+                  <td>{{r.event_location}}</td>
+                  <td>{{r.event_description}}</td>
+                  <td>{{r.event_attachment}}</td>
+              </tr>
+              <!-- <div class="card">
+                <header class="card-header"> -->
+                  <!-- <figure class=" card-header-icon image is-64x64">
+                    <img src="INSERT DB IMAGE REFERENCE URL">
+                  </figure> -->
+                  <!-- <p class="card-header-title">
+                    Event 1
+                  </p>
+                  <button class="card-header-icon">
+                    <span class="icon">
+                      <i class="fas fa-angle-down"></i>
+                    </span>
+                  </button>
+                </header>
+    
+              </div> -->
+
+              <!-- <div class="card">
+                <header class="card-header">
+                  <figure class=" card-header-icon image is-64x64">
+                    <img src="INSERT DB IMAGE REFERENCE URL">
+                  </figure> -->
+                  <!-- <p class="card-header-title">
+                    Event 2
+                  </p>
+                  <button class="card-header-icon">
+                    <span class="icon">
+                      <i class="fas fa-angle-down"></i>
+                    </span>
+                  </button>
+                </header> -->
+    
+              <!-- </div>
+
+              <div class="card">
+                <header class="card-header"> -->
+                  <!-- <figure class=" card-header-icon image is-64x64">
+                    <img src="INSERT DB IMAGE REFERENCE URL">
+                  </figure> -->
+                  <!-- <p class="card-header-title">
+                    Event 3
+                  </p>
+                  <button class="card-header-icon">
+                    <span class="icon">
+                      <i class="fas fa-angle-down"></i>
+                    </span>
+                  </button>
+                </header>
+    
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+[[block page_scripts]]
+<script>
+  let load_events_url = "[[=XML(load_events_url)]]";
+</script>
+<script src="js/index.js"></script>
+[[end]]
