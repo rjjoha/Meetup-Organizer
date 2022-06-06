@@ -40,12 +40,13 @@ import json
 #############    end    ##############
 
 @action("index")
-@action.uses("index.html", auth, T)
+@action.uses("index.html", auth, db, session, T)
 def index():
     user = auth.get_user()
+    profile = db(db.profile.user_email == get_user_email()).select().first()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
-    rows = db(db.pending.pending_inviter == get_user_email()).select()
+    rows = db(db.invite.invitee == get_user_email()).select()
     return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
 
 @action('create_event')
@@ -231,6 +232,16 @@ def all():
 @action.uses("splash_page.html", auth, db, session, T)
 def splash_page():
     return dict()
+
+@action("account_settings", method=["GET", "POST"])
+@action.uses("account_settings.html", db, auth.user, url_signer, session)
+def account_settings():
+    form = Form(db.profile, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
+    if form.accepted:
+        redirect(URL('index'))
+    return dict(form=form)
+
+
 #############    end    ##############
 
 #############Michael Ekman###############
@@ -258,10 +269,4 @@ def edit_event():
 @action("edit_event")
 @action.uses("edit_event.html", db, auth)
 def edit_event():
-    return dict()
-
-    
-@action("account_settings")
-@action.uses("account_settings.html", db, auth)
-def account_settings():
     return dict()
