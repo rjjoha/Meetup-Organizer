@@ -78,11 +78,11 @@ def add_event():
         event_creator=get_user_email(),
     )
     mylist = request.json.get('event_pending_list'),
-    print(mylist)
+    # print(mylist)
     extractlist = []
     for things in mylist[0]:
         extractlist.append(things)
-    print(extractlist)
+   
     for names in extractlist:
         db.pending.insert(
             pending_inviter=get_user_email(),
@@ -91,14 +91,15 @@ def add_event():
         )
         # print(names)
     rows = db(db.pending.pending_invitee).select().as_list()
-    for row in rows:
-        print(row)
-    db.invite.insert(
-        event_invited = id,
-        inviter = get_user_email(),
-        invitee = request.json.get('invitee'),
-        
-    )
+    # for row in rows:
+    #     print(row)
+    for names in extractlist:
+        db.invite.insert(
+                event_invited = id,
+                inviter = get_user_email(),
+                invitee = request.json.get('invitee'),
+                
+        )
     return dict(id=id)
 
 
@@ -184,27 +185,34 @@ def notifications():
 def set_accepted():
   
     eventid = request.json.get('eventid')
-    row = db((db.invite.event_invited == eventid) ).select().first()
+    row = db((db.invite.event_invited == eventid) ).select().as_list()
     email = get_user_email()
-    
-   
-    if row.invitee is not None:
-        print(row)
-        if (email not in row.invitee ):
-            # row.invitee.append(email)
-            print(email)
-            print(row.invitee )
-            row.update_record()
-            
-            # db((db.invite.event_invited == eventid) ).update(
-            #     invitee = row.invitee 
+    for r in row:
+        if r['invitee'] is  "": 
+            # print("this is invitee", r)
+            db((db.invite.id == r['id']) ).update(
+                 invitee = email
 
-            # )
+            )
+            break
+            # r.update_record()
+   
+    # if row.invitee is not None:
+    #     print(row)
+    #     if (email != row.invitee ):
+    #         # row.invitee.append(email)
+    #         row.invitee  = email
+    #         row.update_record()
+            
+    #         # db((db.invite.event_invited == eventid) ).update(
+    #         #     invitee = row.invitee 
+
+    #         # )
        
-    else: 
-        row.invitee  = email
+    # else: 
+    #     row.invitee  = email
         
-        row.update_record()
+    #     row.update_record()
 
    
     return "ok"
@@ -213,29 +221,44 @@ def set_accepted():
 @action.uses(url_signer.verify(), db, auth.user)
 def accepted():
     eventid = request.params.get('eventid') 
-    row = db((db.invite.event_invited == eventid) ).select().first()
+    row = db((db.invite.event_invited == eventid) ).select().as_list()
     email = get_user_email() 
     accepted = False 
-    if row.invitee is not None:
-        if (email in row.invitee ):
-            accepted = True
+    for r in row:
+        if r['invitee'] is not "": 
+            # print("this is invitee", r)
+            if (email in r['invitee'] ):
+                accepted = True
     
-    
+    # if row.invitee is not None:
+    #     print("this is invie", row.invitee)
+    #     if (email == row.invitee ):
+    #         accepted = True
 
     return dict(accepted = accepted)
-
+# load the list of pending list 
 @action('all')
 @action.uses(url_signer.verify(), db)
 def all():
     rows = db(db.event).select().as_list()
     pending = []
     email = get_user_email() 
-    
-    for r in rows: 
-        row =  db((db.pending.event_pending == r['id']) ).select().first()
-        if(email in row.pending_invitee and r['event_creator'] != email ):
-            pending.append(r)
+    row = db(db.pending.event_pending).select().as_list()
+    # print(email)
+    # for r in rows: 
+    # #     print(r['id'])
+    # #     row =  db((db.pending.event_pending == r['id']) ).select().first()
+    for r in row : 
+        
+        if r is not None: 
+            event = db((db.event.id == r['event_pending']) ).select().first()
             
+            if(email in r['pending_invitee'] and event.event_creator != email ):
+                
+                pending.append(event)
+    
+
+    # print(pending)       
     return dict(rows=pending)
     
 #############    end    ##############
