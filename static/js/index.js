@@ -181,6 +181,7 @@ let init = (app) => {
 
     app.add_pending_list = function (e) {
         if(e.key === ',' && this.add_user) {
+            this.add_user = this.add_user.slice(0, -1)
             if(!this.add_event_pending_list.includes(this.add_user)) {
                 this.add_event_pending_list.push(this.add_user);
             }
