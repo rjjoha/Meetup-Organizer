@@ -78,14 +78,21 @@ def add_event():
         event_creator=get_user_email(),
     )
     mylist = request.json.get('event_pending_list'),
-    for names in mylist:
+    print(mylist)
+    extractlist = []
+    for things in mylist[0]:
+        extractlist.append(things)
+    print(extractlist)
+    for names in extractlist:
         db.pending.insert(
             pending_inviter=get_user_email(),
-            pending_invitee= names,
+            pending_invitee=names,
             event_pending=id,
         )
-        print(names)
-
+        # print(names)
+    rows = db(db.pending.pending_invitee).select().as_list()
+    for row in rows:
+        print(row)
     db.invite.insert(
         event_invited = id,
         inviter = get_user_email(),

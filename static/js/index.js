@@ -35,7 +35,7 @@ let init = (app) => {
         rows: [],
 
         // initializing invitee
-        invitee :  [],
+        invitee :  "",
     };
     
     app.image = null;
