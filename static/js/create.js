@@ -73,8 +73,8 @@ let init = (app) => {
         app.vue.add_mode = new_status;
     };
 
-    app.add_pending_list = function (t) {
-        add_event_pending_list.append();
+    app.add_pending_list = function (e) {
+        
     };
     
     app.methods = {
