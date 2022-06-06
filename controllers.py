@@ -188,7 +188,7 @@ def set_accepted():
     row = db((db.invite.event_invited == eventid) ).select().as_list()
     email = get_user_email()
     for r in row:
-        if r['invitee'] is  "": 
+        if r['invitee'] ==  "": 
             # print("this is invitee", r)
             db((db.invite.id == r['id']) ).update(
                  invitee = email
@@ -225,7 +225,7 @@ def accepted():
     email = get_user_email() 
     accepted = False 
     for r in row:
-        if r['invitee'] is not "": 
+        if r['invitee'] != "": 
             # print("this is invitee", r)
             if (email in r['invitee'] ):
                 accepted = True
