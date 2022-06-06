@@ -31,6 +31,7 @@ let init = (app) => {
         add_event_attachment: "",
         add_event_creator: "",
         add_event_pending_list: [],
+        add_user: "",
         rows: [],
 
         // initializing invitee
@@ -158,6 +159,7 @@ let init = (app) => {
         app.vue.add_event_location = "";
         app.vue.add_event_description = "";
         app.vue.add_event_attachment = "";
+        app.vue.add_event_pending_list = [];
     };
 
     app.delete_event = function(row_idx) {
@@ -177,6 +179,15 @@ let init = (app) => {
         app.vue.add_mode = new_status;
     };
 
+    app.add_pending_list = function (e) {
+        if(e.key === ',' && this.add_user) {
+            if(!this.add_event_pending_list.includes(this.add_user)) {
+                this.add_event_pending_list.push(this.add_user);
+            }
+            this.add_user = "";
+        }
+    }
+
     // We form the dictionary of all methods, so we can assign them
     // to the Vue app in a single blow.
     app.methods = {
@@ -189,6 +200,7 @@ let init = (app) => {
         add_event: app.add_event,
         set_add_status: app.set_add_status,
         delete_event: app.delete_event,
+        add_pending_list: app.add_pending_list,
     };
 
     // This creates the Vue instance.

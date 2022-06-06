@@ -127,7 +127,11 @@
       <div class="field">
         <label class="label">Invite Users:</label>
         <div class="control">
-          <input type="text" v-model="add_event_pending_list" class="input">
+          <!-- <input type="text" v-model="add_event_pending_list" class="input"> -->
+          <input type="text" v-model="add_user" @keyup.alt="add_pending_list" class="input">
+          <div v-for="pending in add_event_pending_list" :key="pending" class="pill">
+            {{ pending }}
+          </div>
         </div>
       </div>
       <div class="field">
