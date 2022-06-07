@@ -60,6 +60,13 @@ db.define_table(
     Field('pending_invitee'), #person waiting to accept invite
 )
 
+db.define_table(
+    'announcement',
+    Field('body'),
+    Field('title'),
+    Field('event', 'reference event')
+)
+
 db.event.id.readable = db.event.id.writable = False
 db.profile.id.readable = db.profile.id.writable = False
 db.profile.user_email.readable = db.profile.user_email.writable = False

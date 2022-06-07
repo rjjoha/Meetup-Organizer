@@ -261,3 +261,17 @@ success!
 success!
 success!
 success!
+success!
+success!
+timestamp: 2022-06-07T14:45:39.952798
+CREATE TABLE "announcement"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "body" CHAR(512),
+    "title" CHAR(512),
+    "event" INTEGER REFERENCES "event" ("id") ON DELETE CASCADE  
+);
+success!
+success!
+success!
+success!
+success!

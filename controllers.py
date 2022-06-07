@@ -283,11 +283,11 @@ def account_settings():
 
 #############Michael Ekman###############
 @action("event")
-@action.uses("event.html", db, auth)
+@action.uses(url_signer, "event.html", db, auth)
 def edit_event():
     event = db(db.invite.invitee == get_user_email()).select().first()
     if(event is None):
-        redirect("create_event")
+        redirect("index")
     event = event.event_invited
     title = event.event_title
     icon = event.event_image
@@ -295,13 +295,50 @@ def edit_event():
     date = event.event_date
     attachment = event.event_attachment
     id = event.id
-
+    creator = event.event_creator
     return dict(title=title, 
-                icon=icon, 
                 location=location,
                 date=date, 
+                icon=icon,
                 attachment=attachment, 
-                id=id)
+                id=id,
+                username=get_user_email(),
+                creator=creator,
+                load_announcements_url = URL('load_announcements', signer=url_signer),
+                add_announcement_url = URL('add_announcement', signer=url_signer),
+                delete_announcement_url = URL('delete_announcement', signer=url_signer),
+                )
+
+@action("load_announcements")
+@action.uses(url_signer.verify(), db, auth.user)
+def load_annoucements():
+    id = request.params.get('id')
+    rows = db(db.announcement.event == id).select().as_list()
+    return dict(rows=rows)
+
+@action("add_announcement", method="POST")
+@action.uses(url_signer.verify(), db, auth.user)
+def add_announcement():
+    id = db.announcement.insert(
+        body=request.json.get('body'),
+        title=request.json.get('title'),
+        event=request.json.get('id')
+    )
+    return dict(id=id)
+
+@action('delete_announcement')
+@action.uses(url_signer.verify(), db,auth.user)
+def delete_announcement():
+    id = request.params.get('id')
+    assert id is not None
+    a = db(db.announcement.id == id).select().first()
+    event_id = a.event
+    creator = db(db.event.id == event_id).select().first().event_creator
+    if(creator == get_user_email()):
+        db(db.announcement.id == id).delete()
+        return "ok"
+    return "Failed"
+    
 
 @action("edit_event")
 @action.uses("edit_event.html", db, auth)

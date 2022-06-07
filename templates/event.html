@@ -14,64 +14,65 @@
 
         <div class="columns is-vcentered">
           <figure class="image is-128x128">
-            <img src="INSERT DB IMAGE REFERENCE URL">
+            <img src="[=icon]">
           </figure>
           <h1 class="title" style="color:white">[[=title]]</h1>
         </div>
         <div>
-          <p style="color:white">[[=location]], [=date]]</p>
+          <p style="color:white">[[=location]], [[=date]]</p>
         </div>
       </div>
-      
-      <div class="field is-horizontal">
-        <div class="control">
-          <div class="select is-fullwidth is-info is-outlined">
-            <select>
-              <option @click="set_add_status(true)">Announcment</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <span v-if="add_mode">
-        <div class="field">
+      {{set_is_creator()}}
+      <span v-if="is_creator">
+        <div class="field is-horizontal">
           <div class="control">
-            <div>
-              <input type="text" v-model="add_title" class="input" placeholder="Title...">
+            <div class="select is-fullwidth is-info is-outlined">
+              <select>
+                <option @click="set_add_status(true)">Announcment</option>
+              </select>
             </div>
-            <div>
-              <textarea class="textarea" v-model="add_body" placeholder="Announcment..."></textarea>
+          </div>
+        </div>
+        <span v-if="add_mode">
+          <div class="field">
+            <div class="control">
+              <div>
+                <input type="text" v-model="add_title" class="input" placeholder="Title...">
+              </div>
+              <div>
+                <textarea class="textarea" v-model="add_body" placeholder="Announcment..."></textarea>
+              </div>
+              
             </div>
-            
           </div>
-        </div>
-        <div class="field is-grouped">
-          <div class="control">
-            <input @click="add_post" class="button is-primary" value="Submit" class="button is-primary">
+          <div class="field is-grouped">
+            <div class="control">
+              <input @click="add_post" class="button is-primary" value="Submit" class="button is-primary">
+            </div>
+            <div class="control">
+              <input @click="set_add_status(false)" value="Cancel" class="button is-link is-light">
+            </div>
           </div>
-          <div class="control">
-            <input @click="set_add_status(false)" value="Cancel" class="button is-link is-light">
-          </div>
-        </div>
+        </span>
       </span>
-      
-      <div class="card">
+
+      <div v-for="a in announcements.slice().reverse()" class="card">
         <header class="card-header">
           <p class="card-header-title">
-            New Announcment
+            {{a.title}}
           </p>
   
         </header>
         <div class="card-content">
           <div class="content">
-            Meet at this mountain over by the river thats next to the farm down the road at 10am on Friday. Don't forget to bring shoes!
+            {{a.body}}
           </div>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item">Edit</a>
-            <a href="#" class="card-footer-item">Delete</a>
-            <a href="#" class="card-footer-item">Reply</a>
+          <footer v-if="is_creator" class="card-footer">
+            <a @click="delete_post(a._idx)" class="card-footer-item">Delete</a>
           </footer>
         </div>
       </div>
+      
     </div>
     <a class="button is-primary is-light" href="[[=URL('edit_event')]]">
       <span>Settings</span>
@@ -103,7 +104,13 @@
 </div>
 
 [[block page_scripts]]
-<script src="js/event.js">
-  let event_url = "[[=XML(event_url)]]"
+<script>
+  let username = "[[=username]]";
+  let creator = "[[=creator]]";
+  let event_id = "[[=id]]";
+  let add_announcement_url = "[[=XML(add_announcement_url)]]";
+  let delete_announcement_url = "[[=XML(delete_announcement_url)]]";
+  let load_announcements_url = "[[=XML(load_announcements_url)]]";
 </script>
+<script src="js/event.js"></script>
 [[end]]
