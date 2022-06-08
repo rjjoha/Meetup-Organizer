@@ -68,7 +68,7 @@ def create_event():
 @action('load_events')
 @action.uses(url_signer.verify(), db)
 def load_events():
-    rows = db(db.event).select().as_list()
+    rows = db(db.invite.invitee == get_user_email()).select().as_list()
     return dict(rows=rows)
     
 @action('add_event', method="POST")
