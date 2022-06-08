@@ -13,7 +13,7 @@ let init = (app) => {
         
         show_all: false,
         rows: [],
-        tab: "all",
+        tab: "",
     };
 
     app.enumerate = (a) => {
