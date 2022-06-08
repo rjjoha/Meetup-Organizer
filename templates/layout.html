@@ -31,16 +31,16 @@
         <div class="navbar-start">
           [[if globals().get('user'):]]
           [[block page_menu_items]]
-          <a class="navbar-link" href="[[=URL('event')]]">
+          <a class="navbar-item" href="[[=URL('event')]]">
             Events
           </a>
 
-          <a class="navbar-link" href="[[=URL('create_event')]]">
+          <a class="navbar-item" href="[[=URL('create_event')]]">
             Create New Event
           </a>
 
           
-          <a class="navbar-link" href="[[=URL('notifications')]]">
+          <a class="navbar-item" href="[[=URL('notifications')]]">
             Notifications
           </a>
 
