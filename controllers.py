@@ -172,7 +172,6 @@ def notifications():
         user = auth.get_user()
         rows = db(db.event.event_creator == get_user_email()).select()
         s = user
-     
         return dict(
             all_url = URL('all', signer=url_signer),
             set_accepted_url = URL('set_accepted', signer=url_signer),
@@ -284,7 +283,7 @@ def account_settings():
 #############Michael Ekman###############
 @action("event")
 @action.uses(url_signer, "event.html", db, auth)
-def edit_event():
+def event():
     event = db(db.invite.invitee == get_user_email()).select().first()
     if(event is None):
         redirect("index")
@@ -293,6 +292,7 @@ def edit_event():
     icon = event.event_image
     location = event.event_location
     date = event.event_date
+    description = event.event_description
     attachment = event.event_attachment
     id = event.id
     creator = event.event_creator
@@ -300,13 +300,16 @@ def edit_event():
                 location=location,
                 date=date, 
                 icon=icon,
+                description=description,
                 attachment=attachment, 
                 id=id,
+
                 username=get_user_email(),
                 creator=creator,
                 load_announcements_url = URL('load_announcements', signer=url_signer),
                 add_announcement_url = URL('add_announcement', signer=url_signer),
                 delete_announcement_url = URL('delete_announcement', signer=url_signer),
+                url_signer=url_signer,
                 )
 
 @action("load_announcements")
@@ -341,6 +344,71 @@ def delete_announcement():
     
 
 @action("edit_event")
-@action.uses("edit_event.html", db, auth)
+@action.uses(url_signer.verify(), "edit_event.html", db, auth)
 def edit_event():
-    return dict()
+    event = db(db.invite.invitee == get_user_email()).select().first()
+    event = event.event_invited
+
+    id = event.id
+    creator = event.event_creator
+
+    return dict(id=id,
+                creator=creator,
+                update_event_url = URL('update_event', signer=url_signer),
+                load_event_details_url = URL('load_event_details', signer=url_signer),
+                kick_member_url = URL('kick_member', signer=url_signer),
+                delete_event_url = URL('delete_event', signer=url_signer),
+                )
+                
+@action("load_event_details")
+@action.uses(url_signer.verify(), db, auth)
+def load_event_details():
+    event = db(db.invite.invitee == get_user_email()).select().first()
+    event = event.event_invited
+    title = event.event_title
+    icon = event.event_image
+    location = event.event_location
+    date = event.event_date
+    attachment = event.event_attachment
+    description = event.event_description
+    id = event.id
+    creator = event.event_creator
+
+    members = db(db.invite.event_invited == id).select().as_list()
+    return dict(title=title,
+                icon=icon,
+                location=location,
+                date=date,
+                attachment=attachment,
+                description=description,
+                id=id,
+                creator=creator,
+                members=members,
+                )
+
+@action("update_event", method="POST")
+@action.uses(url_signer.verify(), db, auth)
+def update_event():
+    id = request.params.get('id')
+    event = db(db.event.id == id)
+    creator = event.select().first().event_creator
+    if(creator == get_user_email()):
+        event.update(
+            event_description=request.json.get('description'),
+            event_title=request.json.get('title'),
+            event_location=request.json.get('location'),
+            event_date=request.json.get('date'),
+        )
+        return "ok"
+    return "failed"
+
+@action("kick_member")
+@action.uses(url_signer.verify(), db, auth)
+def kick_member():
+    id = request.params.get('id')
+    assert id is not None
+    invite = db(db.invite.id == id).select().first()
+    if(invite.inviter == get_user_email()):
+        db(db.invite.id == id).delete()
+        return "ok"
+    return "Failed"

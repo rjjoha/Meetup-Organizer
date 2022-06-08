@@ -22,6 +22,12 @@
           <p style="color:white">[[=location]], [[=date]]</p>
         </div>
       </div>
+      <div class="box has-background-info is-medium">
+
+        <div class="columns is-vcentered">
+          <p style="color:white">[[=description]]</h1>
+        </div>
+      </div>
       {{set_is_creator()}}
       <span v-if="is_creator">
         <div class="field is-horizontal">
@@ -74,7 +80,7 @@
       </div>
       
     </div>
-    <a class="button is-primary is-light" href="[[=URL('edit_event')]]">
+    <a v-if="is_creator" class="button is-primary is-light" href="[[=URL('edit_event', signer=url_signer)]]">
       <span>Settings</span>
     </a>
   </section>

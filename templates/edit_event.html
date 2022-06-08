@@ -1,8 +1,15 @@
 [[extend 'layout.html']]
 
+<style>
+  [v-cloak]{
+    display: none;
+  }
+</style>
+
+
 <body>
     <div class="container is-max-widescreen">
-      <section class="section">
+      <section class="section" id="vue-target" v-cloak>
         <div class="block">
           <div class="box has-background-link is-medium">
     
@@ -19,17 +26,41 @@
                     Options
                   </p>
                   <ul class="menu-list">
-                    <li><a>Event Visibility</a></li>
-                    <li><a>Member Privlages</a></li>
-                    <li><a>Delete Event</a></li>
+                    <li @click="delete_event"><a>Delete Event</a></li>
                   </ul>
                   <p class="menu-label">
                     Event Profile
                   </p>
                   <ul class="menu-list">
-                    <li><a>Event Name</a></li>
-                    <li><a>Event Description</a></li>
-                    <li><a>Event Picture</a></li>
+                    <li @click="set_title_status(true)"><a>Event Name</a></li>
+                    <li v-if="set_title">
+                      <input type="text" v-model="add_title" class="input" placeholder="Title...">
+                    </li>
+
+                    <li @click="set_description_status(true)"><a>Event Description</a></li>
+                    <li v-if="set_description">
+                      <textarea class="textarea" v-model="add_description" placeholder="Description..."></textarea>
+                    </li>
+
+                    <li @click="set_location_status(true)"><a>Event Location</a></li>
+                    <li v-if="set_location">
+                      <input type="text" v-model="add_location" class="input" placeholder="Location...">
+                    </li>
+
+                    <li @click="set_date_status(true)"><a>Event Date</a></li>
+                    <li v-if="set_date">
+                      <input type="text" v-model="add_date" class="input" placeholder="Date...">
+                    </li>
+
+                    <li @click="set_attachment_status(true)"><a>Event Attachment</a></li>
+                    <li v-if="set_attachment">
+                      <input type="text" class="input" placeholder="Date...">
+                    </li>
+
+                    <li @click="set_icon_status(true)"><a>Event Icon</a></li>
+                    <li v-if="set_icon">
+                      <input type="text" class="input" placeholder="Date...">
+                    </li>
                   </ul>
                 </aside>
               </form>
@@ -40,19 +71,10 @@
                 <tr>
                   <th>Member</th>
                 </tr>
-                <tr>
-                  <td>Mr. Smith</td>
+                <tr v-for="m in members">
+                  <td>{{m.invitee}}</td>
                   <td>
-                    <a class="button is-danger">
-                      <i class="fa fa-fw fa-trash"></i> Kick
-                    </a>
-                  </td>
-                </tr>
-  
-                <tr>
-                  <td>Mrs. Donavan</td>
-                  <td>
-                    <a class="button is-danger">
+                    <a @click="kick_member(m._idx)" class="button is-danger">
                       <i class="fa fa-fw fa-trash"></i> Kick
                     </a>
                   </td>
@@ -63,6 +85,9 @@
           </div>
           
         </div>
+        <a @click="update_event" class="button is-primary">
+          <span>Save Changes</span>
+        </a>
         <a class="button is-danger is-light" href="[[=URL('event')]]">
           <span>Back</span>
         </a>
@@ -70,3 +95,14 @@
     </div>
 
   </body>
+
+[[block page_scripts]]
+<script>
+  let event_id = "[[=id]]"
+  let load_event_details_url = "[[=load_event_details_url]]";
+  let update_event_url = "[[=update_event_url]]";
+  let kick_member_url = "[[=kick_member_url]]";
+  let delete_event_url = "[[=delete_event_url]]";
+</script>
+<script src="js/edit_event.js"></script>
+[[end]]
