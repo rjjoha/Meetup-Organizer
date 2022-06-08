@@ -16,6 +16,7 @@ let init = (app) => {
         add_hobbies: "",
         add_location: "",
         add_description: "",
+        profile_rows: [],
         
     };
 
@@ -24,6 +25,44 @@ let init = (app) => {
         let k = 0;
         a.map((e) => {e._idx = k++;});
         return a;
+    };
+
+    app.select_image = function (event) {
+        // Reads the image.
+        let input1 = event.target;
+        app.image = input1.files[0];
+        if (app.image) {
+            app.vue.image_selection_done = true;
+            // We read the image.
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.image_url = reader.result;
+            });
+            reader.readAsDataURL(app.image);
+        }
+    };
+
+    app.upload_image_complete = function (image_name, image_type) {
+        app.vue.uploading_image = false;
+        app.vue.uploaded1 = true;
+    };
+
+    app.upload_image = function () {
+        if (app.image) {
+            let image_type = app.image.type;
+            let image_name = app.image.name;
+            let full_image_url = image_upload_url + "&image_name=" + encodeURIComponent(image_name)
+                + "&image_type=" + encodeURIComponent(image_type);
+            // Uploads the image, using the low-level streaming interface. This avoid any
+            // encoding.
+            app.vue.uploading_image = true;
+            let req = new XMLHttpRequest();
+            req.addEventListener("load", function () {
+                app.upload_image_complete(image_name, image_type)
+            });
+            req.open("PUT", full_image_url, true);
+            req.send(app.image);
+        }
     };
 
     app.set_add_status = function(status){
@@ -47,9 +86,21 @@ let init = (app) => {
                 profile_hobbies: app.vue.add_hobbies,
                 profile_location: app.vue.add_location,
                 profile_description: app.vue.add_description,
+            }).then(function (response) {
+            app.vue.profiel_rows.push({
+                id: response.data.id,
+                profile_first_name: app.vue.add_first_name,
+                profile_last_name: app.vue.add_last_name,
+                profile_image: app.vue.add_image,
+                profile_hobbies: app.vue.add_hobbies,
+                profile_location: app.vue.add_location,
+                profile_description: app.vue.add_description,
             });
+           
+            app.enumerate(app.vue.profile_rows);
             app.reset_form();
             app.set_add_status(false);
+        })
     };
 
     // This contains all the methods.

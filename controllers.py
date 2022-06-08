@@ -40,14 +40,19 @@ import json
 #############    end    ##############
 
 @action("index")
-@action.uses("index.html", auth, db, session, T)
+@action.uses("index.html", auth, url_signer, db, session, T)
 def index():
     user = auth.get_user()
-    profile = db(db.profile.user_email == get_user_email()).select().first()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     actions = {"allowed_actions": auth.param.allowed_actions}
-    rows = db(db.invite.invitee == get_user_email()).select()
-    return dict(message=message, actions=actions, rows=rows, url_signer=url_signer)
+    return dict(account_settings_url = URL('account_settings', signer=url_signer),
+                load_profile_url = URL('load_profile', signer=url_signer), 
+                load_events_url = URL('load_events', signer=url_signer), 
+                image_upload_url = URL('image_upload', signer=url_signer),
+                attachment_upload_url = URL('attachment_upload', signer=url_signer),
+                add_event_url = URL('add_event', signer=url_signer),
+                delete_event_url = URL('delete_event', signer=url_signer),
+                message=message, actions=actions, url_signer=url_signer)
 
 @action('create_event')
 @action.uses('create_event.html', url_signer, auth.user, db)
@@ -269,14 +274,26 @@ def all():
 def splash_page():
     return dict()
 
-@action("account_settings", method=["GET", "POST"])
-@action.uses("account_settings.html", db, auth.user, url_signer, session)
+@action('account_settings', method="POST")
+@action.uses(url_signer.verify(), db, session)
 def account_settings():
-    form = Form(db.profile, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
-    if form.accepted:
-        redirect(URL('index'))
-    return dict(form=form)
+    # form = Form(db.profile, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
+    # if form.accepted:
+    #     redirect(URL('index'))
+    id = db.profile.update_or_insert((db.profile.user_email == get_user_email()),
+                        profile_first_name = request.json.get("profile_first_name"),
+                        profile_last_name = request.json.get("profile_last_name"),
+                        profile_image = request.json.get("profile_image"),
+                        profile_hobbies = request.json.get("profile_hobbies"),
+                        profile_location = request.json.get("profile_location"),
+                        profile_description = request.json.get("profile_description"),)
+    return dict(id=id)
 
+@action('load_profile')
+@action.uses(url_signer.verify(), db)
+def load_events():
+    rows = db(db.profile.user_email == get_user_email()).select().first()
+    return dict(rows=rows)
 
 #############    end    ##############
 

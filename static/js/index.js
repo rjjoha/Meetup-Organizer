@@ -36,6 +36,14 @@ let init = (app) => {
 
         // initializing invitee
         invitee :  "",
+
+        add_first_name: "",
+        add_last_name: "",
+        add_image: "",
+        add_hobbies: "",
+        add_location: "",
+        add_description: "",
+        profile_rows: [],
     };
     
     app.image = null;
@@ -160,6 +168,28 @@ let init = (app) => {
         app.vue.add_event_description = "";
         app.vue.add_event_attachment = "";
         app.vue.add_event_pending_list = [];
+
+        app.vue.add_first_name = "";
+        app.vue.add_last_name = "";
+        app.vue.add_image = "";
+        app.vue.add_hobbies = "";
+        app.vue.add_location = "";
+        app.vue.add_description = "";
+    };
+
+    app.add_profile = function () {
+        axios.post(account_settings_url, {
+                profile_first_name: app.vue.add_first_name,
+                profile_last_name: app.vue.add_last_name,
+                profile_image: app.vue.add_image,
+                profile_hobbies: app.vue.add_hobbies,
+                profile_location: app.vue.add_location,
+                profile_description: app.vue.add_description,
+            });
+            app.enumerate(app.vue.profile_rows);
+            app.reset_form();
+            app.set_add_status(false);
+        
     };
 
     app.delete_event = function(row_idx) {
@@ -202,6 +232,8 @@ let init = (app) => {
         set_add_status: app.set_add_status,
         delete_event: app.delete_event,
         add_pending_list: app.add_pending_list,
+
+        add_profile: app.add_profile,
     };
 
     // This creates the Vue instance.
@@ -219,6 +251,9 @@ let init = (app) => {
         axios.get(load_events_url).then(function (response) {
             app.vue.rows = app.enumerate(response.data.rows);
         });
+        axios.get(load_profile_url).then(function (response) {
+            app.vue.profile_rows.push(response.data.rows);
+        })
     };
 
     // Call to the initializer.

@@ -41,7 +41,7 @@ db.define_table(
     Field('profile_image', 'upload'),
     Field('profile_hobbies'),
     Field('profile_location'),
-    Field('description'),
+    Field('profile_description'),
     Field('user_email', default=get_user_email),
 
 )
