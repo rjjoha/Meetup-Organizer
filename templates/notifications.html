@@ -26,17 +26,33 @@
  
   
   <div v-for="r in rows.slice().reverse()">
-
+   <div v-if= "!r.accepted" >
     <div class="notification mb-5">
       <p class="title is-3 is-spaced"> Event title : {{r['event_title']}}</p>
     
-      <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
+      <p class="title is-5 is-spaced" > owner: {{r.event_creator}} </p>
+      <p class="title is-5 is-spaced" >  location: {{r.event_location}}</p>
+      <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
+      <!-- <div v-if= "!r.accepted" > -->
+      <!-- <div v-if= "r.hide" > -->
+      <!-- {{r.hide}}
+       -->
+      <input type="submit"  v-if= "!r.accepted" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
+      <!-- </div> -->
+      <!-- <a @click="DeclineAccept(r._idx)" class="button is-warning">Decline</a>
+       
+       -->
+    </div>
+    </div>
+    <div v-else>
+      <div class="notification mb-5">
+      <p class="title is-3 is-spaced"> Event title : {{r['event_title']}}</p>
+    
+      <p class="title is-5 is-spaced" > owner: {{r.event_creator}} </p>
+      <p class="title is-5 is-spaced" >  location: {{r.event_location}}</p>
 
       <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
-      <div v-if= "!r.accepted" >
-      <input type="submit" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
-      </div>
-      
+    </div>
     </div>
 
  
@@ -53,11 +69,14 @@
       <div class="notification mb-5">
         <p class="title is-3 is-spaced"> Event title : {{r.event_title}}</p>
       
-        <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
+      
+        <p class="title is-5 is-spaced" > owner: {{r.event_creator}} </p>
+        <p class="title is-5 is-spaced" >  location: {{r.event_location}}</p>
   
         <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
         <input type="submit" @click="addAccept(r._idx)" value="Accept" class="button is-primary">
-        
+        <!-- <a @click="DeclineAccept(r._idx)" class="button is-warning">Decline</a>
+        -->
       </div>
 
     
@@ -66,21 +85,25 @@
   
   </div>
 </div>
-
+<div v-if="tab ===''" >
+  <h2 class="subtitle">
+    Click on any tabs to see notifications
+  </h2>
+</div>
 <div v-if="tab ==='accepted'" >
   <!-- <h3>Accepted notifications</h3> -->
   <div v-for="r in rows.slice().reverse()">
     <!-- {{r.accepted}} -->
-    <div v-if= "r.accepted " >
+    <div v-if= "r.accepted" >
       <!-- here you display the notification r -->
       
         <div class="notification mb-5">
           <p class="title is-3 is-spaced"> Event title : {{r.event_title}}</p>
         
-          <p class="title is-5 is-spaced" > owner: {{r.event_creator}} , location: {{r.event_location}}</p>
-    
+          <p class="title is-5 is-spaced" > owner: {{r.event_creator}} </p>
+          <p class="title is-5 is-spaced" >  location: {{r.event_location}}</p>
           <p class="title is-6 is-spaced">event description : {{r.event_description}}</p>
-       
+      
         </div>
     </div>
   
@@ -95,6 +118,7 @@
      let all_url = "[[=XML(all_url)]]"
      let get_accepted_url = "[[=XML(get_accepted_url)]]";
      let set_accepted_url = "[[=XML(set_accepted_url)]]";
+
 
   </script>
   <script src="js/notifications.js"></script>
