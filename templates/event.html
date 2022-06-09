@@ -13,9 +13,9 @@
       <div class="box has-background-link is-medium">
 
         <div class="columns is-vcentered">
-          <figure class="image is-128x128">
+          <!-- <figure class="image is-128x128">
             <img src="[=icon]">
-          </figure>
+          </figure> -->
           <h1 class="title" style="color:white">[[=title]]</h1>
         </div>
         <div>
@@ -28,13 +28,13 @@
           <p style="color:white">[[=description]]</h1>
         </div>
       </div>
-      {{set_is_creator()}}
-      <span v-if="is_creator">
+      
+      <span>
         <div class="field is-horizontal">
           <div class="control">
             <div class="select is-fullwidth is-info is-outlined">
               <select>
-                <option @click="set_add_status(true)">Announcment</option>
+                <option @click="set_add_status(true)">Announcement</option>
               </select>
             </div>
           </div>
@@ -73,15 +73,15 @@
           <div class="content">
             {{a.body}}
           </div>
-          <footer v-if="is_creator" class="card-footer">
+          <footer class="card-footer">
             <a @click="delete_post(a._idx)" class="card-footer-item">Delete</a>
           </footer>
         </div>
       </div>
       
     </div>
-    <a v-if="is_creator" class="button is-primary is-light" href="[[=URL('edit_event', signer=url_signer)]]">
-      <span>Settings</span>
+    <a class="button is-primary is-light" href="[[=URL('edit_event', signer=url_signer)]]">
+      <span>Edit Event</span>
     </a>
   </section>
 
