@@ -8,6 +8,7 @@ This file is provided as an example:
 import os
 from py4web.core import required_folder
 
+
 # db settings
 APP_FOLDER = os.path.dirname(__file__)
 APP_NAME = os.path.split(APP_FOLDER)[-1]
@@ -17,13 +18,26 @@ DB_FOLDER = required_folder(APP_FOLDER, "databases")
 DB_URI = "sqlite://storage.db"
 DB_POOL_SIZE = 1
 DB_MIGRATE = True
-DB_FAKE_MIGRATE = False  # maybe?
+DB_FAKE_MIGRATE = False  
 
-# location where static files are stored:
-STATIC_FOLDER = required_folder(APP_FOLDER, "static")
 
-# location where to store uploaded files:
-UPLOAD_FOLDER = required_folder(APP_FOLDER, "uploads")
+
+CLOUD_DB_URI = "google:MySQLdb://{DB_USER}:{DB_PASSWORD}@/{DB_NAME}?unix_socket=/cloudsql/{DB_CONNECTION}".format(
+    DB_USER="leejin",
+    DB_NAME="sampledb",
+    DB_PASSWORD="Meetuporg1234",
+    DB_CONNECTION="boreal-charter-352703:us-west2:meet-up-org",
+)
+
+CLOUD_DB_POOL_SIZE = 1
+CLOUD_DB_MIGRATE = False  # Means we have to declare all the tables ourselves
+CLOUD_DB_FAKE_MIGRATE = False 
+
+# # location where static files are stored:
+# STATIC_FOLDER = required_folder(APP_FOLDER, "static")
+
+# # location where to store uploaded files:
+# UPLOAD_FOLDER = required_folder(APP_FOLDER, "uploads")
 
 # send verification email on registration
 VERIFY_EMAIL = False
