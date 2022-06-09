@@ -10,6 +10,7 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         set_description: false,
+        change_mode: true,
         set_title: false,
         set_date: false,
         set_location: false,
@@ -21,6 +22,8 @@ let init = (app) => {
         add_date: "",
         add_location: "",
         members: [],
+        events_list: [],
+        event_id: -1,
     };
 
     app.enumerate = (a) => {
@@ -85,13 +88,13 @@ let init = (app) => {
     };
 
     app.update_event = function(){
-        axios.post(update_event_url,
+        axios.post(update_event_url, 
             {
                 title: app.vue.add_title,
                 location: app.vue.add_location,
                 date: app.vue.add_date,
                 description: app.vue.add_description,
-                id: event_id
+                id: app.vue.event_id
             });
     };
 
@@ -110,11 +113,34 @@ let init = (app) => {
 
     app.delete_event = function(){
         axios.get(delete_event_url, {params: {id: event_id}});
-    }
+    };
+
+    app.set_change_status = function(status){
+        app.vue.change_mode = status;
+    };
+
+    app.load_event = function(row_idx){
+        let event = app.vue.events_list[row_idx];
+        app.vue.change_mode = false;
+        app.vue.add_title = event.event_title;
+        app.vue.add_description = event.event_description;
+        app.vue.add_location = event.event_location;
+        app.vue.add_date = event.event_date;
+        app.vue.add_current_id = row_idx;
+        app.vue.event_id = event.id;
+
+        axios.get(load_event_details_url, {params: {id: event.id}}).then((result) => {
+            let members = result.data.members;
+            app.enumerate(members);
+            app.vue.members = members;
+        });
+    };
 
     // This contains all the methods.
     app.methods = {
+        load_event: app.load_event,
         delete_event: app.delete_event,
+        set_change_status: app.set_change_status,
         kick_member: app.kick_member,
         update_event: app.update_event,
         set_title_status: app.set_title_status,
@@ -136,15 +162,12 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
-        axios.get(load_event_details_url).then((result) => {
-            let members = result.data.members;
-            app.enumerate(members);
-            app.vue.members = members;
-            app.vue.add_title = result.data.title;
-            app.vue.add_description = result.data.description;
-            app.vue.add_location = result.data.location;
-            app.vue.add_date = result.data.date;
+        axios.get(load_creator_events_url).then((result) => {
+            let events_list = result.data.events;
+            app.enumerate(events_list);
+            app.vue.events_list = events_list;
         });
+        
     };
 
     // Call to the initializer.

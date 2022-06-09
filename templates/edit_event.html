@@ -10,7 +10,30 @@
 <body>
     <div class="container is-max-widescreen">
       <section class="section" id="vue-target" v-cloak>
-        <div class="block">
+        <div v-if="change_mode" class="block">
+          <table class="table is-striped is-fullwidth">
+            <tr>
+              <th>Select Event To Edit</th>
+            </tr>
+            <tr v-for="e in events_list">
+              <td>{{e.event_title}}</td>
+              <td>
+                <a @click="load_event(e._idx)" class="button is-primary">
+                  load
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <a v-if="!change_mode" @click="set_change_status(true)" class="button is-primary">
+            Show Events
+          </a>
+          <a v-if="change_mode" @click="set_change_status(false)" class="button is-primary is_light">
+            Hide Events
+          </a>
+        </div>
+        <div v-if="!change_mode" class="block">
           <div class="box has-background-link is-medium">
     
             <div class="columns is-vcentered">
@@ -85,7 +108,7 @@
           </div>
           
         </div>
-        <a @click="update_event" class="button is-primary">
+        <a v-if="!change_mode" @click="update_event" class="button is-primary">
           <span>Save Changes</span>
         </a>
         <a class="button is-danger is-light" href="[[=URL('event')]]">
@@ -98,11 +121,12 @@
 
 [[block page_scripts]]
 <script>
-  let event_id = "[[=id]]"
-  let load_event_details_url = "[[=load_event_details_url]]";
-  let update_event_url = "[[=update_event_url]]";
-  let kick_member_url = "[[=kick_member_url]]";
-  let delete_event_url = "[[=delete_event_url]]";
+  let event_id = "[[=id]]";
+  let load_creator_events_url = "[[=XML(load_creator_events_url)]]";
+  let load_event_details_url = "[[=XML(load_event_details_url)]]";
+  let update_event_url = "[[=XML(update_event_url)]]";
+  let kick_member_url = "[[=XML(kick_member_url)]]";
+  let delete_event_url = "[[=XML(delete_event_url)]]";
 </script>
 <script src="js/edit_event.js"></script>
 [[end]]

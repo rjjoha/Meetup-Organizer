@@ -405,7 +405,7 @@ def edit_event():
     creator = event.event_creator
 
     return dict(id=id,
-                creator=creator,
+                load_creator_events_url = URL('load_creator_events', signer=url_signer),
                 update_event_url = URL('update_event', signer=url_signer),
                 load_event_details_url = URL('load_event_details', signer=url_signer),
                 kick_member_url = URL('kick_member', signer=url_signer),
@@ -415,26 +415,10 @@ def edit_event():
 @action("load_event_details")
 @action.uses(url_signer.verify(), db, auth)
 def load_event_details():
-    event = db(db.invite.invitee == get_user_email()).select().first()
-    event = event.event_invited
-    title = event.event_title
-    icon = event.event_image
-    location = event.event_location
-    date = event.event_date
-    attachment = event.event_attachment
-    description = event.event_description
-    id = event.id
-    creator = event.event_creator
+    id = request.params.get('id')
 
     members = db(db.invite.event_invited == id).select().as_list()
-    return dict(title=title,
-                icon=icon,
-                location=location,
-                date=date,
-                attachment=attachment,
-                description=description,
-                id=id,
-                creator=creator,
+    return dict(
                 members=members,
                 )
 
@@ -479,4 +463,10 @@ def load_user_events():
             "event_description": event.event_description,
             "event_creator": event.event_creator,
         })
+    return dict(events=events)
+
+@action("load_creator_events")
+@action.uses(url_signer.verify(), db,auth)
+def load_creator_events():
+    events = db(db.event.event_creator == get_user_email()).select().as_list()
     return dict(events=events)
