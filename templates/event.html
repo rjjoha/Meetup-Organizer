@@ -83,31 +83,45 @@
     <a class="button is-primary is-light" href="[[=URL('edit_event', signer=url_signer)]]">
       <span>Edit Event</span>
     </a>
-  </section>
-
-<div class="section">
+    
+    <div class="section">
   <div class="block">
     <div class="box has-background-link is-medium">
-      <div class="columns is-vcentered">
-     <h1 class="title" style="color:white">Discussion</h1>
-      </div>
-      
-    <div id="comments" class="block">
-      <!-- Here will go the comments. -->
-    </div>
+      <h1 class="title">Discussion Forum</h1>
 
-    <div class="block">
-      <div class="field">
-        <p class="control">
-          <input class="input" type="text" id="new_comment" value=""/>
-        </p>
+  <section class="section">
+    <div class="">
+      <div class="is-fullwidth">
+        <div class="field">
+          <textarea v-model="currentpost" class="textarea is-fullwidth" placeholder="Send a message!"></textarea>
+        </div>
+        <button class="button is-primary" @click="add_message">Message</button>
+        <button class="button is-warning" @click="clear_message">Cancel</button>
       </div>
-      <button class="button is-primary" id="add_button">Add</button>
     </div>
+  </section>
+
+  <div class="container block has-background-link">
+        <div class="tile is-child notification has-background-link" v-for="m in messages">
+          <div class="box has-background-light">
+            <div class="has-text-grey">{{m.entered_name}}</div>
+            <div>{{m.post_message}}</div>
+            <div class="is-size-4">
+              <span v-if="user_email==m.user_email"  @click="delete_message(m._idx)" class="has-text-danger level-right">
+                <i class="fa fa-trash fa-fw"></i>
+            </span>
+          </div>
+          </div>
+          
+          </div>
+          </div>
 
   </div>
 </div>
 </div>
+  </section>
+
+
 
 [[block page_scripts]]
 <script>
@@ -117,6 +131,12 @@
   let add_announcement_url = "[[=XML(add_announcement_url)]]";
   let delete_announcement_url = "[[=XML(delete_announcement_url)]]";
   let load_announcements_url = "[[=XML(load_announcements_url)]]";
+  
+  let get_messages_url = "[[=XML(get_messages_url)]]";
+  let user_email = "[[=XML(user_email)]]";
+  let usern = "[[=XML(usern)]]";
+  let add_message_url = "[[=XML(add_message_url)]]";
+  let delete_message_url = "[[=XML(delete_message_url)]]";
 </script>
 <script src="js/event.js"></script>
 [[end]]

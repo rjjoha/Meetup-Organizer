@@ -332,6 +332,13 @@ def event():
                 load_announcements_url = URL('load_announcements', signer=url_signer),
                 add_announcement_url = URL('add_announcement', signer=url_signer),
                 delete_announcement_url = URL('delete_announcement', signer=url_signer),
+                
+                get_messages_url = URL('get_messages', signer=url_signer),
+                add_message_url = URL('add_message', signer=url_signer),
+                delete_message_url= URL('delete_message', signer=url_signer),
+                user_email = get_user_email(),
+                usern =  auth.current_user.get('first_name') + " " + auth.current_user.get("last_name"),
+        
                 url_signer=url_signer,
                 )
 
@@ -364,7 +371,35 @@ def delete_announcement():
         db(db.announcement.id == id).delete()
         return "ok"
     return "Failed"
-    
+
+
+@action('get_messages')
+@action.uses(url_signer.verify(), auth.user)
+def get_messages():
+    messages = db(db.post).select().as_list()
+    for post in messages:
+        r = db(db.auth_user.email == post['user_email']).select().first()
+        name = r.first_name + " " + r.last_name if r is not None else "Unknown"
+        post["entered_name"] = name
+    messages.reverse() 
+    return dict(messages=messages)
+
+@action('add_message', method="POST")
+@action.uses(url_signer.verify(), auth.user, db)
+def add_message():
+    id = db.post.insert(
+        post_message = request.json.get('post_message')
+    )
+    return dict(id=id)
+
+@action('delete_message')
+@action.uses(url_signer.verify(), db, auth.user)
+def delete_message():
+    id = request.params.get('id')
+    assert id is not None
+    db(db.post.id == id).delete()
+    return "ok"
+
 
 @action("edit_event")
 @action.uses(url_signer.verify(), "edit_event.html", db, auth)
