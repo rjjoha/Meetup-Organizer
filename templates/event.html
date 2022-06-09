@@ -9,32 +9,54 @@
 
 <div class="container is-max-widescreen">
   <section class="section" id="vue-target" v-cloak>
-    <div class="block">
+    <div v-if="change_mode" class="block">
+      <table class="table is-striped is-fullwidth">
+        <tr>
+          <th>Events</th>
+        </tr>
+        <tr v-for="e in events_list">
+          <td>{{e.event_title}}</td>
+          <td>
+            <a @click="load_event(e._idx)" class="button is-primary">
+              load
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <a @click="set_change_status(true)" class="button is-primary">
+        Show Events
+      </a>
+      <a v-if="change_mode" @click="set_change_status(false)" class="button is-primary is_light">
+        Hide Events
+      </a>
+    </div>
+    <div v-if="!change_mode" class="block">
       <div class="box has-background-link is-medium">
 
         <div class="columns is-vcentered">
           <!-- <figure class="image is-128x128">
             <img src="[=icon]">
           </figure> -->
-          <h1 class="title" style="color:white">[[=title]]</h1>
+          <h1 class="title" style="color:white">{{title}}</h1>
         </div>
         <div>
-          <p style="color:white">[[=location]], [[=date]]</p>
+          <p style="color:white">{{location}}, {{date}}</p>
         </div>
       </div>
       <div class="box has-background-info is-medium">
 
         <div class="columns is-vcentered">
-          <p style="color:white">[[=description]]</h1>
+          <p style="color:white">{{description}}</h1>
         </div>
       </div>
-      
-      <span>
+      <span v-if="is_creator">
         <div class="field is-horizontal">
           <div class="control">
             <div class="select is-fullwidth is-info is-outlined">
               <select>
-                <option @click="set_add_status(true)">Announcement</option>
+                <option @click="set_add_status(true)">Announcment</option>
               </select>
             </div>
           </div>
@@ -73,14 +95,14 @@
           <div class="content">
             {{a.body}}
           </div>
-          <footer class="card-footer">
+          <footer v-if="is_creator" class="card-footer">
             <a @click="delete_post(a._idx)" class="card-footer-item">Delete</a>
           </footer>
         </div>
       </div>
       
     </div>
-    <a class="button is-primary is-light" href="[[=URL('edit_event', signer=url_signer)]]">
+    <a v-if="is_creator" class="button is-primary is-light" href="[[=URL('edit_event', signer=url_signer)]]">
       <span>Edit Event</span>
     </a>
     
@@ -125,12 +147,13 @@
 
 [[block page_scripts]]
 <script>
+  let signer = "[[=url_signer]]";
   let username = "[[=username]]";
-  let creator = "[[=creator]]";
-  let event_id = "[[=id]]";
   let add_announcement_url = "[[=XML(add_announcement_url)]]";
   let delete_announcement_url = "[[=XML(delete_announcement_url)]]";
   let load_announcements_url = "[[=XML(load_announcements_url)]]";
+  let load_user_events_url = "[[=XML(load_user_events_url)]]";
+  let load_event_details_url = "[[=load_event_details_url]]";
   
   let get_messages_url = "[[=XML(get_messages_url)]]";
   let user_email = "[[=XML(user_email)]]";

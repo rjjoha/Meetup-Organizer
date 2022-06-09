@@ -418,3 +418,24 @@ success!
 success!
 success!
 success!
+success!
+success!
+timestamp: 2022-06-08T23:38:58.234975
+CREATE TABLE "post"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_email" CHAR(512),
+    "post_message" TEXT
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

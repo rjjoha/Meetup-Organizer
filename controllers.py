@@ -194,18 +194,21 @@ def notifications():
 @action('set_accepted', method='POST')
 @action.uses(db, auth.user, url_signer.verify())
 def set_accepted():
-  
     eventid = request.json.get('eventid')
-    row = db((db.invite.event_invited == eventid) ).select().as_list()
-    email = get_user_email()
-    for r in row:
-        if r['invitee'] ==  "": 
-            # print("this is invitee", r)
-            db((db.invite.id == r['id']) ).update(
-                 invitee = email
+    creator = db(db.event.id == eventid).select().first().event_creator
 
-            )
-            break
+    db.invite.update_or_insert(event_invited = eventid, invitee = get_user_email(), inviter=creator)
+    #eventid = request.json.get('eventid')
+    #row = db((db.invite.event_invited == eventid) ).select().as_list()
+    #email = get_user_email()
+    #for r in row:
+        #if r['invitee'] ==  "": 
+            # print("this is invitee", r)
+           # db((db.invite.id == r['id']) ).update(
+                 #invitee = email
+
+           # )
+           #break
             # r.update_record()
    
     # if row.invitee is not None:
@@ -307,30 +310,12 @@ def load_events():
 @action("event")
 @action.uses(url_signer, "event.html", db, auth)
 def event():
-    event = db(db.invite.invitee == get_user_email()).select().first()
-    if(event is None):
-        redirect("index")
-    event = event.event_invited
-    title = event.event_title
-    icon = event.event_image
-    location = event.event_location
-    date = event.event_date
-    description = event.event_description
-    attachment = event.event_attachment
-    id = event.id
-    creator = event.event_creator
-    return dict(title=title, 
-                location=location,
-                date=date, 
-                icon=icon,
-                description=description,
-                attachment=attachment, 
-                id=id,
-
+    return dict(
                 username=get_user_email(),
-                creator=creator,
+                load_user_events_url = URL('load_user_events', signer=url_signer),
                 load_announcements_url = URL('load_announcements', signer=url_signer),
                 add_announcement_url = URL('add_announcement', signer=url_signer),
+                load_event_details_url = URL('load_event_details', signer=url_signer),
                 delete_announcement_url = URL('delete_announcement', signer=url_signer),
                 
                 get_messages_url = URL('get_messages', signer=url_signer),
@@ -470,3 +455,19 @@ def kick_member():
         db(db.invite.id == id).delete()
         return "ok"
     return "Failed"
+
+@action("load_user_events")
+@action.uses(url_signer.verify(), db,auth)
+def load_user_events():
+    invites = db(db.invite.invitee == get_user_email()).select().as_list()
+    events = []
+    for i in invites:
+        event = db(db.event.id == i['event_invited']).select().first()
+        events.append({
+            "event_id": event.id,
+            "event_title": event.event_title,
+            "event_location": event.event_location,
+            "event_description": event.event_description,
+            "event_creator": event.event_creator,
+        })
+    return dict(events=events)

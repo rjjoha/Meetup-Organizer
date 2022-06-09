@@ -10,10 +10,14 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         add_mode: false,
+        change_mode: true,
         add_body: "",
         add_title: "",
         announcements: [],
+        events_list: [],
         is_creator: false,
+        current_id: -1,
+        event_id: "",
         
         user_email: user_email,
         messages: [],
@@ -27,12 +31,14 @@ let init = (app) => {
         return a;
     };
 
-    app.add_post = function(){
+    app.add_post = function(row_idx){
+        let id = app.vue.events_list[app.vue.current_id].event_id;
+        console.log(id)
         axios.post(add_announcement_url,
             {
                 body: app.vue.add_body,
                 title: app.vue.add_title,
-                id: event_id
+                id: id,
             }).then(function (response) {
                 app.vue.announcements.push({
                     id: response.data.id,
@@ -68,16 +74,38 @@ let init = (app) => {
         app.vue.add_mode = status;
     };
 
+    app.set_change_status = function(status){
+        app.vue.change_mode = status;
+    };
+
     app.set_is_creator = function(){
-        if(creator == username){
-            is_creator = true;
+        let event = app.vue.events_list[app.vue.current_id];
+        if(event.event_creator == username){
+            app.vue.is_creator = true;
         }else{
-            is_creator = false;
+            app.vue.is_creator = false;
         }
 
     }
 
-
+    app.load_event = function(row_idx){
+        let event = app.vue.events_list[row_idx];
+        app.vue.change_mode = false;
+        app.vue.title = event.event_title;
+        app.vue.description = event.event_description;
+        app.vue.location = event.event_location;
+        app.vue.date = event.event_date;
+        app.vue.current_id = row_idx;
+        app.vue.event_id =  event.event_id;
+        app.vue.set_is_creator();
+        axios.get(load_announcements_url, {params: {"id": event.event_id}})
+            .then((result) => {
+                let announcements = result.data.rows;
+                app.enumerate(announcements);
+                //app.complete(announcements);
+                app.vue.announcements = announcements;
+            })
+    };
 
     app.add_message = function() { 
         axios.post(add_message_url, {
@@ -122,10 +150,12 @@ let init = (app) => {
 
     // This contains all the methods.
     app.methods = {
+        load_event: app.load_event,
         set_is_creator: app.set_is_creator,
         delete_post: app.delete_post,
         add_post: app.add_post,
         set_add_status: app.set_add_status,
+        set_change_status: app.set_change_status,
         
         add_message: app.add_message,
         clear_message: app.clear_message,
@@ -143,20 +173,18 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
-        axios.get(load_announcements_url, {params: {"id": event_id}})
-            .then((result) => {
-                let announcements = result.data.rows;
-                app.enumerate(announcements);
-                //app.complete(announcements);
-                app.vue.announcements = announcements;
-            });
-            axios.get(get_messages_url)
-            .then((result) => {
-                // We set them
-                let messages = result.data.messages;
-                app.enumerate(messages);
-                app.vue.messages = messages;
-            })
+        axios.get(load_user_events_url).then((result) => {
+            let events_list = result.data.events;
+            app.enumerate(events_list);
+            app.vue.events_list = events_list;
+        });
+        axios.get(get_messages_url)
+        .then((result) => {
+            // We set them
+            let messages = result.data.messages;
+            app.enumerate(messages);
+            app.vue.messages = messages;
+        })
 
     };
 
