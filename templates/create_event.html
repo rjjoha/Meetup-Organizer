@@ -44,6 +44,7 @@
         </div>
       </div>
       <div class="field">
+        <label class="label">Event Image:</label>
         <div v-if="!image_selection_done" class="field has-addons block">
             <div class="control">
               <div class="file is-info">
@@ -91,6 +92,7 @@
         </div>
       </div>
       <div class="field">
+        <label class="label">Event Attachment:</label>
         <div v-if="!attachment_selection_done" class="field has-addons block">
             <div class="control">
               <div class="file is-info">
@@ -125,7 +127,7 @@
           </div>
       </div>
       <div class="field">
-        <label class="label">Invite Users:</label>
+        <label class="label">Invite Users (Press comma to add to list. Don't press Add unless you see all the names below the box):</label>
         <div class="control">
           <!-- <input type="text" v-model="add_event_pending_list" class="input"> -->
           <input type="text" v-model="add_user" @keyup="add_pending_list" class="input">

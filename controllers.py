@@ -302,6 +302,15 @@ def account_settings():
 @action.uses(url_signer.verify(), db)
 def load_events():
     rows = db(db.profile.user_email == get_user_email()).select().first()
+    if rows is None:
+        db.profile.insert(
+            profile_first_name='New',
+            profile_last_name='User',
+            profile_hobbies='Change',
+            profile_location='Profile',
+            profile_description='Settings',
+            user_email=get_user_email())
+    rows = db(db.profile.user_email == get_user_email()).select().first()     
     return dict(rows=rows)
 
 #############    end    ##############

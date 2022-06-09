@@ -11,6 +11,7 @@
   <div class="container block">
     <h1 class="title">[[=message]]</h1>
     
+    [[if globals().get('user'):]]
     <table class="table is-striped is-fullwidth">
       <tr><h2 class="title">Profile Details</h1></tr>
       <tr>
@@ -29,6 +30,7 @@
         <td>{{pr.profile_description}}</td>
       </tr>
     </table>
+    [[pass]]
     <table class="table is-striped is-fullwidth">
       <tr><h2 class="title">Events</h1></tr>
       <tr>
