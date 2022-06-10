@@ -28,7 +28,7 @@ db.define_table(
     Field('event_image'),
     Field('event_location', requires=IS_NOT_EMPTY()),
     Field('event_description', requires=IS_NOT_EMPTY()),
-    Field('event_date', 'date'),
+    Field('event_date'),
     Field('event_attachment', 'upload'),
     Field('invite_users'),
     Field('event_creator', default=get_user_email, requires=IS_NOT_EMPTY()),

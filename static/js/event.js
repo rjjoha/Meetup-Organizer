@@ -18,6 +18,7 @@ let init = (app) => {
         is_creator: false,
         current_id: -1,
         event_id: "",
+        icon: "",
         
         user_email: user_email,
         messages: [],
@@ -90,6 +91,13 @@ let init = (app) => {
 
     app.load_event = function(row_idx){
         let event = app.vue.events_list[row_idx];
+        app.vue.icon = "";
+        axios.post(obtain_gcs, {
+            action: "GET",
+            file_path: event.event_icon
+        }).then((result) => {
+            app.vue.icon = result.data.signed_url;
+        });
         app.vue.change_mode = false;
         app.vue.title = event.event_title;
         app.vue.description = event.event_description;
@@ -175,6 +183,7 @@ let init = (app) => {
         // Typically this is a server GET call to load the data.
         axios.get(load_user_events_url).then((result) => {
             let events_list = result.data.events;
+            console.log(result.data.events);
             app.enumerate(events_list);
             app.vue.events_list = events_list;
         });

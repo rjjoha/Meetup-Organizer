@@ -25,7 +25,7 @@ let init = (app) => {
         
         add_mode: false,
         add_event_title: "",
-        add_event_image: "",
+        add_event_image: null,
         add_event_location: "",
         add_event_description: "",
         add_event_attachment: "",
@@ -62,6 +62,7 @@ let init = (app) => {
         let input1 = event.target;
         app.image = input1.files[0];
         if (app.image) {
+            app.vue.add_event_image = app.image;
             app.vue.image_selection_done = true;
             // We read the image.
             let reader = new FileReader();
@@ -72,28 +73,40 @@ let init = (app) => {
         }
     };
 
-    app.upload_image_complete = function (image_name, image_type) {
+    app.upload_image = function () {
+        const file = app.image;
+        if (file) {
+            app.vue.uploading_image = true;
+            let file_type = file.type;
+            let file_name = file.name;
+            let file_size = file.size;
+            // Requests the upload URL.
+            axios.post(obtain_gcs, {
+                action: "PUT",
+                mimetype: file_type,
+                file_name: file_name
+            }).then ((r) => {
+                let upload_url = r.data.signed_url;
+                let file_path = r.data.file_path;
+                // Uploads the file, using the low-level interface.
+                let req = new XMLHttpRequest();
+                // We listen to the load event = the file is uploaded, and we call upload_complete.
+                // That function will notify the server `of the location of the image.
+                req.addEventListener("load", function () {
+                    app.upload_complete(file_name, file_type, file_size, file_path);
+                });
+                // TODO: if you like, add a listener for "error" to detect failure.
+                req.open("PUT", upload_url, true);
+                req.send(file);
+            });
+        }
+    }
+
+    app.upload_complete = function (file_name, file_type, file_size, file_path) {
         app.vue.uploading_image = false;
         app.vue.uploaded1 = true;
-    };
-
-    app.upload_image = function () {
-        if (app.image) {
-            let image_type = app.image.type;
-            let image_name = app.image.name;
-            let full_image_url = image_upload_url + "&image_name=" + encodeURIComponent(image_name)
-                + "&image_type=" + encodeURIComponent(image_type);
-            // Uploads the image, using the low-level streaming interface. This avoid any
-            // encoding.
-            app.vue.uploading_image = true;
-            let req = new XMLHttpRequest();
-            req.addEventListener("load", function () {
-                app.upload_image_complete(image_name, image_type)
-            });
-            req.open("PUT", full_image_url, true);
-            req.send(app.image);
-        }
-    };
+        app.vue.uploaded_image = file_path;
+    }
     
     // selecting and uploading attachment
     app.select_attachment = function (event) {
@@ -117,41 +130,59 @@ let init = (app) => {
     };
 
     app.upload_attachment = function () {
-        if (app.attachment1) {
-            let attachment_type = app.attachment1.type;
-            let attachment_name = app.attachment1.name;
-            let full_attachment_url = attachment_upload_url + "&attachment_name=" + encodeURIComponent(attachment_name)
-                + "&attachment_type=" + encodeURIComponent(attachment_type);
-            // Uploads the attachment, using the low-level streaming interface. This avoid any
-            // encoding.
+        const file = app.attachment1;
+        if (file) {
             app.vue.uploading_attachment = true;
-            let req = new XMLHttpRequest();
-            req.addEventListener("load", function () {
-                app.upload_attachment_complete(attachment_name, attachment_type)
+            let file_type = file.type;
+            let file_name = file.name;
+            let file_size = file.size;
+            // Requests the upload URL.
+            axios.post(obtain_gcs, {
+                action: "PUT",
+                mimetype: file_type,
+                file_name: file_name
+            }).then ((r) => {
+                let upload_url = r.data.signed_url;
+                let file_path = r.data.file_path;
+                // Uploads the file, using the low-level interface.
+                let req = new XMLHttpRequest();
+                // We listen to the load event = the file is uploaded, and we call upload_complete.
+                // That function will notify the server `of the location of the image.
+                req.addEventListener("load", function () {
+                    app.upload_attachment_complete(file_name, file_type, file_size, file_path);
+                });
+                // TODO: if you like, add a listener for "error" to detect failure.
+                req.open("PUT", upload_url, true);
+                req.send(file);
             });
-            req.open("PUT", full_attachment_url, true);
-            req.send(app.attachment1);
         }
     };
 
+    app.upload_attachment_complete = function (file_name, file_type, file_size, file_path) {
+        app.vue.uploading_attachment = false;
+        app.vue.uploaded2 = true;
+        app.vue.uploaded_attachment = file_path;
+    }
+
     app.add_event = function () {
-        axios.post(add_event_url,
+        axios.post(add_event_url, 
             {
                 event_title: app.vue.add_event_title,
-                event_image: app.vue.add_event_image,
                 event_location: app.vue.add_event_location,
+                event_image: app.vue.uploaded_image,
                 event_description: app.vue.add_event_description,
-                event_attachment: app.vue.add_event_attachment,
+                event_attachment: app.vue.uploaded_attachment,
                 event_pending_list: app.vue.add_event_pending_list,
                 invitee :  app.vue.invitee,
-            }).then(function (response) {
+            }
+            ).then(function (response) {
             app.vue.rows.push({
                 id: response.data.id,
                 event_title: app.vue.add_event_title,
-                event_image: app.vue.add_event_image,
+                event_image: app.vue.uploaded_image,
                 event_location: app.vue.add_event_location,
                 event_description: app.vue.add_event_description,
-                event_attachment: app.vue.add_event_attachment,
+                event_attachment: app.vue.uploaded_attachment,
                 event_pending_list: app.vue.add_event_pending_list,
                 invitee :  app.vue.invitee,
             });
