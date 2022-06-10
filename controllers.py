@@ -28,7 +28,13 @@ Warning: Fixtures MUST be declared with @action.uses({fixtures}) else your app w
 from py4web import action, request, abort, redirect, URL, Field
 from py4web.utils.form import Form, FormStyleBulma
 from yatl.helpers import A
+import tempfile
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
+
+from .gcs_url import gcs_url
+from nqgcs import NQGCS
+import uuid
+
 
 ##############Leejin Kim##############
 from .models import get_user_email
@@ -38,6 +44,41 @@ import os
 url_signer = URLSigner(session)
 import json
 #############    end    ##############
+
+BUCKET = '/event_image_bucket'
+# GCS keys.  You have to create them for this to work.  See README.md
+GCS_KEY_PATH = os.path.join(APP_FOLDER, 'private/gcs_keys.json')
+with open(GCS_KEY_PATH) as gcs_key_f:
+    GCS_KEYS = json.load(gcs_key_f)
+
+# I create a handle to gcs, to perform the various operations.
+gcs = NQGCS(json_key_path=GCS_KEY_PATH)
+
+@action('obtain_gcs', method="POST")
+@action.uses(url_signer.verify(), db)
+def obtain_gcs():
+    """Returns the URL to do download / upload / delete for GCS."""
+    verb = request.json.get("action")
+    if verb == "PUT":
+        mimetype = request.json.get("mimetype", "")
+        file_name = request.json.get("file_name")
+        extension = os.path.splitext(file_name)[1]
+        # Use + and not join for Windows, thanks Blayke Larue
+        file_path = BUCKET + "/" + str(uuid.uuid1()) + extension
+        upload_url = gcs_url(GCS_KEYS, file_path, verb='PUT',
+                             content_type=mimetype)
+        return dict(
+            signed_url=upload_url,
+            file_path=file_path
+        )
+    elif verb in ["GET", "DELETE"]:
+        file_path = request.json.get("file_path")
+        if file_path is not None:
+            # Yes, we can let the deletion happen.
+            signed_url = gcs_url(GCS_KEYS, file_path, verb=verb)
+            return dict(signed_url=signed_url)
+        # Otherwise, we return no URL, so we don't authorize the deletion.
+        return dict(signer_url=None)
 
 @action("index")
 @action.uses("index.html", auth, url_signer, db, session, T)
@@ -58,6 +99,8 @@ def index():
 @action.uses('create_event.html', url_signer, auth.user, db)
 def create_event():
     return dict(
+        obtain_gcs = URL('obtain_gcs', signer=url_signer),
+        load_profile_url = URL('load_profile', signer=url_signer),
         image_upload_url = URL('image_upload', signer=url_signer),
         attachment_upload_url = URL('attachment_upload', signer=url_signer),
         load_events_url = URL('load_events', signer=url_signer),
@@ -321,6 +364,7 @@ def load_events():
 def event():
     return dict(
                 username=get_user_email(),
+                obtain_gcs=URL('obtain_gcs', signer=url_signer),
                 load_user_events_url = URL('load_user_events', signer=url_signer),
                 load_announcements_url = URL('load_announcements', signer=url_signer),
                 add_announcement_url = URL('add_announcement', signer=url_signer),
@@ -457,12 +501,15 @@ def load_user_events():
     for i in invites:
         event = db(db.event.id == i['event_invited']).select().first()
         events.append({
+            "event_icon": event.event_image,
+            "event_attachment": event.event_attachment,
             "event_id": event.id,
             "event_title": event.event_title,
             "event_location": event.event_location,
             "event_description": event.event_description,
             "event_creator": event.event_creator,
         })
+    print(events)
     return dict(events=events)
 
 @action("load_creator_events")

@@ -36,9 +36,9 @@
       <div class="box has-background-link is-medium">
 
         <div class="columns is-vcentered">
-          <!-- <figure class="image is-128x128">
-            <img src="[=icon]">
-          </figure> -->
+          <figure class="image is-128x128">
+            <img :src=icon>
+          </figure>
           <h1 class="title" style="color:white">{{title}}</h1>
         </div>
         <div>
@@ -149,6 +149,7 @@
 <script>
   let signer = "[[=url_signer]]";
   let username = "[[=username]]";
+  let obtain_gcs = "[[=XML(obtain_gcs)]]";
   let add_announcement_url = "[[=XML(add_announcement_url)]]";
   let delete_announcement_url = "[[=XML(delete_announcement_url)]]";
   let load_announcements_url = "[[=XML(load_announcements_url)]]";
