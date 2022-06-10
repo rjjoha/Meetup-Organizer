@@ -81,6 +81,21 @@ CREATE TABLE `pending`(
   CONSTRAINT `erp_fk` FOREIGN KEY (`event_pending`) REFERENCES `event` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `announcement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `body` varchar(512) NOT NULL,
+  `title` varchar(512) NOT NULL,
+  `event` int(11),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `era_fk` FOREIGN KEY (`event`) REFERENCES `event` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_email` varchar(512) NOT NULL,
+  `post_message` varchar(512) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 <!-- 
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

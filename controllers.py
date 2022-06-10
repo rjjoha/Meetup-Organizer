@@ -45,7 +45,7 @@ url_signer = URLSigner(session)
 import json
 #############    end    ##############
 
-BUCKET = '/event_image_bucket'
+BUCKET = '/meetup-organizer'
 # GCS keys.  You have to create them for this to work.  See README.md
 GCS_KEY_PATH = os.path.join(APP_FOLDER, 'private/gcs_keys.json')
 with open(GCS_KEY_PATH) as gcs_key_f:
